@@ -35,6 +35,19 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Handle body scroll lock when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isMobileMenuOpen])
+
   return (
     <>
       {/* Announcement Bar */}
@@ -148,9 +161,13 @@ export default function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-300"
+                  onClick={() => {
+                    console.log('Mobile menu clicked, current state:', isMobileMenuOpen)
+                    setIsMobileMenuOpen(!isMobileMenuOpen)
+                  }}
+                  className="text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-300 p-2"
                   aria-label="Toggle mobile menu"
+                  aria-expanded={isMobileMenuOpen}
                 >
                   {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
@@ -161,15 +178,15 @@ export default function Header() {
 
         {/* Mobile Bottom Sheet Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-50">
+          <div className="md:hidden fixed inset-0 z-[60]">
             {/* Backdrop */}
             <div 
-              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             
             {/* Bottom Sheet */}
-            <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-full duration-300">
+            <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl transform transition-all duration-300 ease-out max-h-[80vh] overflow-y-auto">
               <div className="p-6 space-y-6">
                 {/* Handle */}
                 <div className="flex justify-center">

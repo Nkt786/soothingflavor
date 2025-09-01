@@ -9,25 +9,26 @@ A modern, responsive web application built with Next.js 15, TypeScript, and Tail
 - **About Page** - Company story, mission, and values
 - **Products Catalog** - E-commerce functionality with shopping cart
 - **Meal Plans** - Detailed meal planning with nutritional information
-- **Blog** - Health and wellness articles
-- **Health Coaching** - Personalized coaching services and packages
+- **Admin Dashboard** - Complete order and inventory management system
+- **Order Management** - Track orders, manage inventory, and view analytics
 
 ### Technical Features
 - **Responsive Design** - Mobile-first approach with Tailwind CSS
 - **TypeScript** - Full type safety and better development experience
 - **Next.js 15** - Latest features with App Router and Turbopack
 - **Authentication Ready** - NextAuth.js integration for user management
-- **Database Ready** - Prisma ORM with PostgreSQL support
+- **Database Ready** - Prisma ORM with SQLite (dev) / PostgreSQL (production)
 - **Image Optimization** - Next.js Image component for performance
 - **Error Handling** - Comprehensive error boundaries and fallbacks
+- **Admin Panel** - Role-based access control (Admin, Manager, Staff)
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: Next.js 15, React 18, TypeScript
-- **Styling**: Tailwind CSS, CSS Modules
-- **Authentication**: NextAuth.js
-- **Database**: Prisma ORM, PostgreSQL
-- **State Management**: Zustand
+- **Styling**: Tailwind CSS, Radix UI components
+- **Authentication**: NextAuth.js (JWT sessions)
+- **Database**: Prisma ORM, SQLite (dev), PostgreSQL (production)
+- **State Management**: Zustand for cart, React Query for server state
 - **UI Components**: Custom component library with Radix UI primitives
 - **Icons**: Lucide React
 - **Build Tool**: Turbopack
@@ -37,21 +38,31 @@ A modern, responsive web application built with Next.js 15, TypeScript, and Tail
 ```
 src/
 ├── app/                    # Next.js App Router pages
-│   ├── about/             # About page
-│   ├── blog/              # Blog page
-│   ├── health-coaching/   # Health coaching page
-│   ├── meal-plans/        # Meal plans pages
-│   ├── products/          # Products page
+│   ├── (storefront)/      # Customer-facing pages
+│   │   ├── about/         # About page
+│   │   ├── products/      # Product catalog
+│   │   ├── meal-plans/    # Meal plans pages
+│   │   ├── checkout/      # Checkout process
+│   │   └── contact/       # Contact page
+│   ├── admin/             # Admin dashboard
+│   │   ├── products/      # Product management
+│   │   ├── orders/        # Order management
+│   │   ├── inventory/     # Inventory tracking
+│   │   └── dashboard/     # Analytics and KPIs
 │   └── api/               # API routes
+│       ├── admin/         # Admin API endpoints
+│       ├── orders/        # Order management APIs
+│       └── auth/          # Authentication APIs
 ├── components/             # Reusable UI components
-│   ├── ui/                # Base UI components
+│   ├── ui/                # Base UI components (shadcn/ui)
+│   ├── admin/             # Admin-specific components
 │   ├── commerce/          # E-commerce components
 │   └── marketing/         # Marketing components
 ├── lib/                    # Utility functions and configurations
 │   ├── auth.ts            # NextAuth configuration
 │   ├── prisma.ts          # Database client
-│   └── store/             # State management
-└── types/                  # TypeScript type definitions
+│   └── store/             # State management (Zustand)
+└── context/                # React contexts
 ```
 
 ## 🚀 Getting Started
@@ -59,13 +70,13 @@ src/
 ### Prerequisites
 - Node.js 18+ 
 - npm or yarn
-- PostgreSQL database (for production)
+- Git
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Nkt786/soothingflavor.git
    cd soothingflavor
    ```
 
@@ -75,24 +86,24 @@ src/
    ```
 
 3. **Set up environment variables**
-   ```bash
-   cp .env.example .env.local
-   ```
-   
-   Configure the following variables:
+   Create a `.env.local` file with:
    ```env
-   DATABASE_URL="postgresql://..."
-   NEXTAUTH_SECRET="your-secret-key"
+   # Database
+   DATABASE_URL="file:./prisma/dev.db"
+   
+   # NextAuth Configuration
+   NEXTAUTH_SECRET="your-secret-key-change-this-in-production"
    NEXTAUTH_URL="http://localhost:3001"
-   GOOGLE_CLIENT_ID="your-google-client-id"
-   GOOGLE_CLIENT_SECRET="your-google-client-secret"
+   
+   # Development
+   NODE_ENV="development"
    ```
 
 4. **Set up the database**
    ```bash
    npx prisma generate
    npx prisma db push
-   npx prisma db seed
+   npm run db:seed:simple
    ```
 
 5. **Run the development server**
@@ -105,21 +116,30 @@ src/
 
 ## 📱 Available Pages
 
+### Customer Pages
 - **Home** (`/`) - Landing page with hero section
 - **About** (`/about`) - Company information and mission
 - **Products** (`/products`) - Product catalog with cart
 - **Meal Plans** (`/meal-plans`) - Available meal plans
-- **Individual Meal Plans** (`/meal-plans/[slug]`) - Detailed meal plan information
-- **Blog** (`/blog`) - Health and wellness articles
-- **Health Coaching** (`/health-coaching`) - Coaching services
+- **Checkout** (`/checkout`) - Shopping cart and order process
+- **Contact** (`/contact`) - Contact information
+
+### Admin Pages
+- **Admin Dashboard** (`/admin`) - Main admin panel
+- **Products Management** (`/admin/products`) - Add/edit products
+- **Orders Management** (`/admin/orders`) - View and manage orders
+- **Inventory Tracking** (`/admin/inventory`) - Stock management
+- **Analytics** (`/admin/dashboard`) - KPIs and charts
 
 ## 🛒 E-commerce Features
 
-- Product catalog with categories
-- Shopping cart functionality
+- Product catalog with categories and filtering
+- Shopping cart with persistent state
 - Product search and filtering
 - Responsive product cards
 - Add to cart with quantity management
+- Checkout process
+- Order tracking
 
 ## 🍽️ Meal Planning Features
 
@@ -129,13 +149,18 @@ src/
 - Meal suggestions for each plan
 - Pricing and subscription options
 
-## 🔐 Authentication
+## 🔐 Authentication & Admin Access
 
-The app is configured with NextAuth.js and supports:
-- Google OAuth
-- Email authentication
-- JWT sessions
-- Role-based access control
+### Demo Accounts (Created by seed script)
+- **Admin**: `admin@demo.local` / `admin123`
+- **Manager**: `manager@demo.com` / `manager123`
+- **Staff**: `staff@demo.com` / `staff123`
+
+### Features
+- Role-based access control (Admin, Manager, Staff)
+- JWT session management
+- Protected admin routes
+- User management system
 
 ## 🎨 Customization
 
@@ -144,6 +169,7 @@ The app is configured with NextAuth.js and supports:
 - Custom color scheme with green/blue gradients
 - Responsive breakpoints for all devices
 - Dark mode ready (can be easily implemented)
+- shadcn/ui components for consistent UI
 
 ### Components
 - Modular component architecture
@@ -151,41 +177,65 @@ The app is configured with NextAuth.js and supports:
 - Consistent design patterns
 - Easy to extend and modify
 
-## 📊 Performance
+## 📊 Performance & Features
 
 - **Image Optimization** - Next.js Image component with automatic optimization
 - **Code Splitting** - Automatic route-based code splitting
 - **Static Generation** - Pre-rendered pages for better SEO
 - **Bundle Analysis** - Optimized JavaScript bundles
+- **Admin Analytics** - Real-time KPIs and charts
+- **Inventory Management** - Stock tracking and alerts
 
 ## 🧪 Development
 
 ### Available Scripts
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run type-check   # Run TypeScript compiler
+# Development
+npm run dev              # Start dev server (port 3001)
+npm run build           # Build for production
+npm run start           # Start production server
+npm run lint            # Run linting
+
+# Database
+npm run db:studio       # Open Prisma Studio
+npm run db:migrate      # Run migrations
+npm run db:seed:simple  # Seed with sample data
+
+# Utilities
+npm run clean           # Clean build files
+npm run dev:free        # Kill port 3001 and start dev
 ```
 
 ### Code Quality
 
 - ESLint configuration for code quality
-- Prettier for consistent formatting
 - TypeScript for type safety
+- Prettier for consistent formatting
 - Husky for pre-commit hooks (can be added)
 
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
-1. Connect your GitHub repository
-2. Configure environment variables
-3. Deploy automatically on push
+1. Push your code to GitHub
+2. Connect repository to Vercel
+3. Configure environment variables:
+   ```env
+   DATABASE_URL="postgresql://your-production-db-url"
+   NEXTAUTH_SECRET="your-production-secret"
+   NEXTAUTH_URL="https://your-domain.vercel.app"
+   ```
+4. Deploy automatically
+
+### Database Migration for Production
+```bash
+# For PostgreSQL (production)
+npx prisma migrate deploy
+npm run db:seed:simple
+```
 
 ### Other Platforms
-- Netlify
+- Netlify (requires static export config)
 - Railway
 - DigitalOcean App Platform
 - AWS Amplify
@@ -197,22 +247,38 @@ npm run type-check   # Run TypeScript compiler
 - Image domains configured
 - Environment variables loaded
 - API routes configured
+- Vercel deployment optimized
 
 ### Database
 - Prisma schema with comprehensive models
+- SQLite for development
+- PostgreSQL for production
 - Seed data for development
 - Migration support for production
 
+## 📈 Admin Dashboard Features
+
+- **Real-time KPIs** - Orders, revenue, inventory alerts
+- **Order Management** - View, update, and track orders
+- **Product Management** - Add, edit, and manage products
+- **Inventory Tracking** - Stock levels and movement history
+- **Analytics Charts** - Sales trends and performance metrics
+- **User Management** - Role-based access control
+
 ## 📈 Future Enhancements
 
-- [ ] User dashboard and profile management
-- [ ] Order management system
+- [x] Admin dashboard with analytics
+- [x] Order management system
+- [x] Inventory tracking
+- [x] Role-based authentication
 - [ ] Payment integration (Stripe)
 - [ ] Real-time chat support
 - [ ] Mobile app (React Native)
 - [ ] Advanced analytics
 - [ ] Multi-language support
 - [ ] Dark mode toggle
+- [ ] Email notifications
+- [ ] SMS alerts
 
 ## 🤝 Contributing
 
@@ -238,23 +304,9 @@ For support and questions:
 - Next.js team for the amazing framework
 - Tailwind CSS for the utility-first CSS framework
 - Prisma team for the excellent ORM
+- shadcn/ui for the beautiful component library
 - All contributors and supporters
 
 ---
-available commands 
-# Development
-npm run dev              # Start dev server (port 3001)
-npm run build           # Build for production
-npm run start           # Start production server
-npm run lint            # Run linting
 
-# Database
-npm run db:studio       # Open Prisma Studio
-npm run db:migrate      # Run migrations
-npm run db:seed:simple  # Seed with sample data
-
-# Utilities
-npm run clean           # Clean build files
-npm run dev:free        # Kill port 3001 and start dev
-**Built with ❤️ for healthy living and wellness**
-"# soothing_flavor" 
+**Built with ❤️ for healthy living and wellness** 

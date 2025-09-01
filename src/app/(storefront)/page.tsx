@@ -1,33 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import AnimatedFoodBackground from '@/components/AnimatedFoodBackground'
 
 export default function Home() {
   return (
     <main id="main-content" className="min-h-screen">
       {/* Hero Section - Split Layout with Image Collage */}
       <section className="relative py-20 md:py-32 bg-gradient-green-hero overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Floating animated shapes */}
-          <div className="absolute top-10 left-10 w-32 h-32 bg-sf-green/10 rounded-full animate-float-slow blur-sm"></div>
-          <div className="absolute top-20 right-20 w-24 h-24 bg-sf-teal/15 rounded-full animate-float-medium blur-sm"></div>
-          <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-sf-mint/20 rounded-full animate-float-fast blur-sm"></div>
-          <div className="absolute top-1/3 right-1/3 w-16 h-16 bg-sf-orange/10 rounded-full animate-float-slow blur-sm"></div>
-          
-          {/* Animated gradient orbs */}
-          <div className="absolute top-1/4 left-1/3 w-40 h-40 bg-gradient-to-br from-sf-green/5 to-sf-teal/5 rounded-full animate-pulse-slow blur-xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-gradient-to-br from-sf-mint/5 to-sf-green/5 rounded-full animate-pulse-medium blur-xl"></div>
-          
-          {/* Temporary animated background image/video placeholder */}
-          {/* TODO: Replace this with your custom image/video */}
-          {/* Example: <video className="w-full h-full object-cover" autoPlay muted loop>
-            <source src="/your-video.mp4" type="video/mp4" />
-          </video> */}
-          {/* Example: <Image src="/your-background.jpg" alt="" fill className="object-cover" /> */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="w-full h-full bg-gradient-to-br from-sf-green/20 via-sf-teal/15 to-sf-mint/10 animate-gradient-shift"></div>
-          </div>
-        </div>
+        {/* Animated Food Background */}
+        <AnimatedFoodBackground />
         
         {/* Enhanced green texture overlay */}
         <div className="absolute inset-0 bg-green-dots opacity-30"></div>

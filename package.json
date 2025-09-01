@@ -11,9 +11,12 @@
     "clean:dev": "npm run clean && npm run dev",
     "dev:free": "npx kill-port 3001 && next dev -p 3001",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:simple": "tsx prisma/seed-simple.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:dev": "prisma db push --schema=./prisma/schema-sqlite.prisma",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
