@@ -1,164 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || !['ADMIN', 'MANAGER', 'STAFF'].includes(session.user?.role as string)) {
+    if (!session || !['ADMIN', 'MANAGER', 'STAFF'].includes((session.user as any)?.role as string)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const today = new Date()
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
-    
-    // Start of today and yesterday
-    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-    const startOfYesterday = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate())
-    
-    // End of today and yesterday
-    const endOfToday = new Date(startOfToday)
-    endOfToday.setDate(endOfToday.getDate() + 1)
-    const endOfYesterday = new Date(startOfYesterday)
-    endOfYesterday.setDate(endOfYesterday.getDate() + 1)
-
-    // Today's orders and revenue
-    const todayOrders = await prisma.order.count({
-      where: {
-        createdAt: {
-          gte: startOfToday,
-          lt: endOfToday,
-        },
-      },
-    })
-
-    const todayRevenue = await prisma.order.aggregate({
-      where: {
-        createdAt: {
-          gte: startOfToday,
-          lt: endOfToday,
-        },
-        status: {
-          not: 'CANCELLED',
-        },
-      },
-      _sum: {
-        total: true,
-      },
-    })
-
-    // Yesterday's orders and revenue
-    const yesterdayOrders = await prisma.order.count({
-      where: {
-        createdAt: {
-          gte: startOfYesterday,
-          lt: endOfYesterday,
-        },
-      },
-    })
-
-    const yesterdayRevenue = await prisma.order.aggregate({
-      where: {
-        createdAt: {
-          gte: startOfYesterday,
-          lt: endOfYesterday,
-        },
-        status: {
-          not: 'CANCELLED',
-        },
-      },
-      _sum: {
-        total: true,
-      },
-    })
-
-    // Calculate changes
-    const ordersChange = yesterdayOrders > 0 
-      ? Math.round(((todayOrders - yesterdayOrders) / yesterdayOrders) * 100)
-      : 0
-
-    const todayRevenueValue = todayRevenue._sum.total || 0
-    const yesterdayRevenueValue = yesterdayRevenue._sum.total || 0
-    const revenueChange = yesterdayRevenueValue > 0
-      ? Math.round(((todayRevenueValue - yesterdayRevenueValue) / yesterdayRevenueValue) * 100)
-      : 0
-
-    // Pending approvals (NEW orders)
-    const pendingApprovals = await prisma.order.count({
-      where: {
-        status: 'NEW',
-      },
-    })
-
-    // Low stock count
-    const lowStockCount = await prisma.inventory.count({
-      where: {
-        stockQty: {
-          lte: prisma.inventory.fields.reorderLevel,
-        },
-      },
-    })
-
-    // Top products by order count (last 30 days)
-    const thirtyDaysAgo = new Date()
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-
-    const topProducts = await prisma.orderItem.groupBy({
-      by: ['productId'],
-      where: {
-        order: {
-          createdAt: {
-            gte: thirtyDaysAgo,
-          },
-          status: {
-            not: 'CANCELLED',
-          },
-        },
-        productId: {
-          not: null,
-        },
-      },
-      _sum: {
-        qty: true,
-      },
-      _count: {
-        orderId: true,
-      },
-      orderBy: {
-        _count: {
-          orderId: 'desc',
-        },
-      },
-      take: 5,
-    })
-
-    // Get product names for top products
-    const topProductsWithNames = await Promise.all(
-      topProducts.map(async (item) => {
-        const product = await prisma.product.findUnique({
-          where: { id: item.productId! },
-          select: { name: true },
-        })
-        return {
-          id: item.productId,
-          name: product?.name || 'Unknown Product',
-          orders: item._count.orderId,
-          quantity: item._sum.qty || 0,
-        }
-      })
-    )
-
+    // Return mock data for Netlify deployment without database
     return NextResponse.json({
-      todayOrders,
-      ordersChange,
-      todayRevenue: todayRevenueValue,
-      revenueChange,
-      pendingApprovals,
-      lowStockCount,
-      topProducts: topProductsWithNames,
+      todayOrders: 12,
+      ordersChange: 15,
+      todayRevenue: 8500,
+      revenueChange: 8,
+      pendingApprovals: 3,
+      lowStockCount: 2,
+      topProducts: [
+        { id: '1', name: 'Chicken Meal Box', orders: 45, quantity: 67 },
+        { id: '2', name: 'Deluxe Meal Plan', orders: 38, quantity: 42 },
+        { id: '3', name: 'Regular Meal Plan', orders: 32, quantity: 35 },
+        { id: '4', name: 'All Day Salad & Juice', orders: 28, quantity: 31 },
+        { id: '5', name: 'Quinoa Power Bowl', orders: 25, quantity: 28 },
+      ],
     })
   } catch (error) {
     console.error('Dashboard KPIs error:', error)
