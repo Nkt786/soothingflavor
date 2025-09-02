@@ -15,3 +15,6 @@ export async function getPrisma() {
     return null;
   }
 }
+
+// Default export for API routes
+export const prisma = await getPrisma();

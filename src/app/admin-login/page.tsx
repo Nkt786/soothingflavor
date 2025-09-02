@@ -20,8 +20,8 @@ export default function AdminLoginPage() {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (status === 'authenticated' && session?.user?.role) {
-      if (['ADMIN', 'MANAGER', 'STAFF'].includes(session.user.role as string)) {
+    if (status === 'authenticated' && session?.user && (session.user as any).role) {
+      if (['ADMIN', 'MANAGER', 'STAFF'].includes((session.user as any).role as string)) {
         const next = searchParams.get('next') || '/admin'
         router.push(next)
       }

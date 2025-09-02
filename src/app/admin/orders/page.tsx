@@ -23,21 +23,21 @@ export default function OrdersPage() {
   const { data: ordersData, isLoading } = useQuery({
     queryKey: ['admin-orders', searchQuery, statusFilter],
     queryFn: async () => {
-      const response = await api.get('/api/admin/orders', {
-        params: {
-          search: searchQuery,
-          status: statusFilter || undefined
-        }
-      })
-      return response.data
+      const params = new URLSearchParams()
+      if (searchQuery) params.append('search', searchQuery)
+      if (statusFilter) params.append('status', statusFilter)
+      
+      const url = `/api/admin/orders${params.toString() ? `?${params.toString()}` : ''}`
+      const response = await api.get(url) as any
+      return response
     },
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 
   const updateOrderStatusMutation = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string; status: string }) => {
-      const response = await api.patch(`/api/admin/orders/${orderId}/status`, { status })
-      return response.data
+      const response = await api.patch(`/api/admin/orders/${orderId}/status`, { status }) as any
+      return response
     },
     onSuccess: (data, variables) => {
       toast.success(`Order status updated to ${variables.status}`)
@@ -45,7 +45,7 @@ export default function OrdersPage() {
       queryClient.invalidateQueries({ queryKey: ['admin-dashboard'] })
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.error || 'Failed to update order status')
+      toast.error(error.message || 'Failed to update order status')
     },
   })
 

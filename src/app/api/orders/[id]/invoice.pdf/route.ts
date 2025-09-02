@@ -4,8 +4,9 @@ import { authOptions } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
     
@@ -13,13 +14,11 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const orderId = params.id
-
     // For now, return a simple text response
     // In production, this would generate a proper PDF using a library like puppeteer or jsPDF
     const invoiceText = `
 Order Invoice
-Order ID: ${orderId}
+Order ID: ${id}
 Date: ${new Date().toLocaleDateString()}
 
 Customer: Demo Customer
@@ -41,7 +40,7 @@ Payment: Cash on Delivery
     return new NextResponse(invoiceText, {
       headers: {
         'Content-Type': 'text/plain',
-        'Content-Disposition': `attachment; filename="invoice-${orderId}.txt"`
+        'Content-Disposition': `attachment; filename="invoice-${id}.txt"`
       }
     })
   } catch (error) {

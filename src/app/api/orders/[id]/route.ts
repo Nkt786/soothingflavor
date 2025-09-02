@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getPrisma } from "@/lib/prisma";
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const prisma = await getPrisma();
     if (!prisma) {
@@ -10,7 +11,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     }
 
     const o = await prisma.order.findFirst({
-      where: { OR: [{ id: params.id }, { orderNumber: params.id }] },
+      where: { OR: [{ id: id }, { orderNumber: id }] },
       include: { items: true },
     });
     if (!o) return NextResponse.json({ error: "Order not found" }, { status: 404 });

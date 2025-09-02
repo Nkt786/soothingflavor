@@ -4,16 +4,15 @@ import { authOptions } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
     
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    const orderId = params.id
 
     // Set up Server-Sent Events headers
     const response = new NextResponse(
@@ -23,7 +22,7 @@ export async function GET(
           controller.enqueue(
             new TextEncoder().encode(`data: ${JSON.stringify({
               type: 'connected',
-              orderId,
+              orderId: id,
               timestamp: new Date().toISOString()
             })}\n\n`)
           )
@@ -33,7 +32,7 @@ export async function GET(
             // In production, this would check the database for actual status changes
             const mockUpdate = {
               type: 'status_update',
-              orderId,
+              orderId: id,
               status: 'placed', // This would change based on admin actions
               timestamp: new Date().toISOString()
             }

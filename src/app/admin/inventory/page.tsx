@@ -22,21 +22,21 @@ export default function InventoryPage() {
   const { data: inventoryData, isLoading } = useQuery({
     queryKey: ['admin-inventory', searchQuery, lowStockFilter],
     queryFn: async () => {
-      const response = await api.get('/api/admin/inventory', {
-        params: {
-          search: searchQuery,
-          lowStock: lowStockFilter
-        }
-      })
-      return response.data
+      const params = new URLSearchParams()
+      if (searchQuery) params.append('search', searchQuery)
+      if (lowStockFilter) params.append('lowStock', lowStockFilter.toString())
+      
+      const url = `/api/admin/inventory${params.toString() ? `?${params.toString()}` : ''}`
+      const response = await api.get(url) as { inventory: any[]; pagination: any }
+      return response
     },
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 
   const stockMovementMutation = useMutation({
     mutationFn: async (data: { inventoryId: string; qty: number; reason: string; note: string }) => {
-      const response = await api.post('/api/admin/inventory/movements', data)
-      return response.data
+      const response = await api.post('/api/admin/inventory/movements', data) as any
+      return response
     },
     onSuccess: (data) => {
       toast.success(`Stock ${movementType === 'in' ? 'added' : 'removed'} successfully`)
@@ -45,7 +45,7 @@ export default function InventoryPage() {
       setSelectedItem(null)
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.error || 'Failed to process stock movement')
+      toast.error(error.message || 'Failed to process stock movement')
     },
   })
 

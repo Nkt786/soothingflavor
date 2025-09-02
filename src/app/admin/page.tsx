@@ -20,13 +20,19 @@ import { api } from '@/lib/api'
 export default function AdminDashboard() {
   const { data: kpis, isLoading: kpisLoading } = useQuery({
     queryKey: ['admin-kpis'],
-    queryFn: () => api.get('/api/admin/dashboard/kpis'),
+    queryFn: async () => {
+      const response = await api.get('/api/admin/dashboard/kpis') as any
+      return response
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
   const { data: attentionItems, isLoading: attentionLoading } = useQuery({
     queryKey: ['admin-attention'],
-    queryFn: () => api.get('/api/admin/dashboard/attention'),
+    queryFn: async () => {
+      const response = await api.get('/api/admin/dashboard/attention') as any
+      return response
+    },
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 

@@ -23,7 +23,7 @@ export default function AdminLayout({
     )
   }
 
-  if (!session || !['ADMIN', 'MANAGER', 'STAFF'].includes(session.user?.role as string)) {
+  if (!session || !['ADMIN', 'MANAGER', 'STAFF'].includes((session.user as any)?.role as string)) {
     redirect('/admin-login')
   }
 

@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const mealPlan = getMealPlanBySlug(params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const mealPlan = getMealPlanBySlug(slug)
   
   if (!mealPlan) {
     return {
@@ -179,8 +180,9 @@ function getMealPlanBySlug(slug: string) {
   return mealPlans.find(plan => plan.slug === slug)
 }
 
-export default function MealPlanPage({ params }: { params: { slug: string } }) {
-  const mealPlan = getMealPlanBySlug(params.slug)
+export default async function MealPlanPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const mealPlan = getMealPlanBySlug(slug)
   
   if (!mealPlan) {
     notFound()

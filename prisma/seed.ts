@@ -51,7 +51,8 @@ async function main() {
 
   console.log('✅ Categories created')
 
-  // Create meal plans
+  // Create meal plans - COMMENTED OUT - model doesn't exist in current schema
+  /*
   const mealPlans = await Promise.all([
     prisma.mealPlan.upsert({
       where: { slug: 'weight-loss' },
@@ -162,8 +163,8 @@ async function main() {
       }
     })
   ])
-
   console.log('✅ Meal plans created')
+  */
 
   // Create products
   const products = await Promise.all([
@@ -174,83 +175,54 @@ async function main() {
         slug: 'almond-butter',
         name: 'Premium Almond Butter',
         description: 'Smooth and creamy almond butter made from premium California almonds',
-        images: ['/images/products/almond-butter-1.jpg', '/images/products/almond-butter-2.jpg'],
-        price: 299.00,
-        salePrice: 249.00,
         categoryId: categories[2].id, // nut-butters
-        stock: 50,
-        attributes: {
-          size: '250g',
-          flavor: 'Natural',
-          type: 'Organic'
-        },
-        nutrition: {
-          servingSize: '15g',
-          calories: 90,
-          protein: '3g',
-          carbs: '3g',
-          fats: '8g',
-          fiber: '2g'
-        }
+        images: '/images/products/almond-butter.jpg',
+        priceMRP: 299.00,
+        priceSale: 249.00,
+        veg: true,
+        tags: 'organic,gluten-free',
+        calories: 90,
+        protein: 3
       }
     }),
     prisma.product.upsert({
-      where: { slug: 'vegan-chocolate-chip-cookies' },
+      where: { slug: 'vegan-chocolate' },
       update: {},
       create: {
-        slug: 'vegan-chocolate-chip-cookies',
+        slug: 'vegan-chocolate',
         name: 'Vegan Chocolate Chip Cookies',
         description: 'Delicious plant-based cookies with dark chocolate chips',
-        images: ['/images/products/vegan-cookies-1.jpg', '/images/products/vegan-cookies-2.jpg'],
-        price: 199.00,
         categoryId: categories[0].id, // vegan-sweets
-        stock: 100,
-        attributes: {
-          size: '6 cookies',
-          flavor: 'Chocolate Chip',
-          type: 'Vegan'
-        },
-        nutrition: {
-          servingSize: '1 cookie',
-          calories: 120,
-          protein: '2g',
-          carbs: '18g',
-          fats: '5g',
-          fiber: '1g'
-        }
+        images: '/images/products/vegan-chocolate.jpg',
+        priceMRP: 199.00,
+        veg: true,
+        tags: 'vegan,gluten-free',
+        calories: 120,
+        protein: 2
       }
     }),
     prisma.product.upsert({
-      where: { slug: 'low-cal-pesto-sauce' },
+      where: { slug: 'healthy-sauce' },
       update: {},
       create: {
-        slug: 'low-cal-pesto-sauce',
+        slug: 'healthy-sauce',
         name: 'Low-Cal Pesto Sauce',
         description: 'Flavorful pesto sauce with reduced calories and maximum taste',
-        images: ['/images/products/pesto-sauce-1.jpg', '/images/products/pesto-sauce-2.jpg'],
-        price: 149.00,
         categoryId: categories[1].id, // low-cal-sauces
-        stock: 75,
-        attributes: {
-          size: '200ml',
-          flavor: 'Basil Pesto',
-          type: 'Low-Calorie'
-        },
-        nutrition: {
-          servingSize: '30ml',
-          calories: 45,
-          protein: '1g',
-          carbs: '2g',
-          fats: '4g',
-          fiber: '1g'
-        }
+        images: '/images/products/healthy-sauce.jpg',
+        priceMRP: 149.00,
+        veg: true,
+        tags: 'low-calorie,organic',
+        calories: 45,
+        protein: 1
       }
     })
   ])
 
   console.log('✅ Products created')
 
-  // Create testimonials
+  // Create testimonials - COMMENTED OUT - model doesn't exist in current schema
+  /*
   const testimonials = await Promise.all([
     prisma.testimonial.upsert({
       where: { id: 'testimonial-1' },
@@ -289,10 +261,11 @@ async function main() {
       }
     })
   ])
-
   console.log('✅ Testimonials created')
+  */
 
-  // Create FAQs
+  // Create FAQs - COMMENTED OUT - model doesn't exist in current schema
+  /*
   const faqs = await Promise.all([
     prisma.faq.upsert({
       where: { id: 'faq-1' },
@@ -325,10 +298,11 @@ async function main() {
       }
     })
   ])
-
   console.log('✅ FAQs created')
+  */
 
-  // Create service areas
+  // Create service areas - COMMENTED OUT - model doesn't exist in current schema
+  /*
   const serviceAreas = await Promise.all([
     prisma.serviceArea.upsert({
       where: { id: 'area-1' },
@@ -361,8 +335,8 @@ async function main() {
       }
     })
   ])
-
   console.log('✅ Service areas created')
+  */
 
   console.log('🎉 Database seeding completed successfully!')
 }

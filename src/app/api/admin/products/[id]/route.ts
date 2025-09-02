@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -14,8 +14,10 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       include: {
         category: true,
         inventory: true,
@@ -38,7 +40,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -47,6 +49,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const body = await request.json()
     const {
       name,
@@ -66,7 +69,7 @@ export async function PATCH(
 
     // Check if product exists
     const existingProduct = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id: id },
     })
 
     if (!existingProduct) {
@@ -90,7 +93,7 @@ export async function PATCH(
 
     // Update product
     const updatedProduct = await prisma.product.update({
-      where: { id: params.id },
+      where: { id: id },
       data: updateData,
     })
 
@@ -101,7 +104,7 @@ export async function PATCH(
       if (unit !== undefined) inventoryUpdateData.unit = unit
 
       await prisma.inventory.update({
-        where: { productId: params.id },
+        where: { productId: id },
         data: inventoryUpdateData,
       })
     }
@@ -109,10 +112,10 @@ export async function PATCH(
     // Log audit
     await prisma.auditLog.create({
       data: {
-        actorId: session.user.id!,
+        actorId: session.user?.id!,
         action: 'UPDATE',
         entity: 'PRODUCT',
-        entityId: params.id,
+        entityId: id,
         details: {
           changes: updateData,
         },
@@ -131,7 +134,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -140,9 +143,11 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     // Check if product exists
     const existingProduct = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id: id },
     })
 
     if (!existingProduct) {
@@ -151,7 +156,7 @@ export async function DELETE(
 
     // Check if product has orders
     const orderCount = await prisma.orderItem.count({
-      where: { productId: params.id },
+      where: { productId: id },
     })
 
     if (orderCount > 0) {
@@ -163,16 +168,16 @@ export async function DELETE(
 
     // Delete product (this will cascade to inventory and meal plan items)
     await prisma.product.delete({
-      where: { id: params.id },
+      where: { id: id },
     })
 
     // Log audit
     await prisma.auditLog.create({
       data: {
-        actorId: session.user.id!,
+        actorId: session.user?.id!,
         action: 'DELETE',
         entity: 'PRODUCT',
-        entityId: params.id,
+        entityId: id,
         details: {
           name: existingProduct.name,
         },
@@ -181,7 +186,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Product deleted successfully' })
   } catch (error) {
-    console.error('Product deletion error:', error)
+    console.error('Product delete error:', error)
     return NextResponse.json(
       { error: 'Failed to delete product' },
       { status: 500 }

@@ -32,7 +32,10 @@ export default function ProductsPage() {
 
   const { data: categories } = useQuery({
     queryKey: ['admin-categories'],
-    queryFn: () => api.get('/api/admin/categories'),
+    queryFn: async () => {
+      const response = await api.get('/api/admin/categories') as any
+      return response
+    },
     staleTime: 10 * 60 * 1000, // 10 minutes
   })
 
