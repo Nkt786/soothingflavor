@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -22,8 +23,6 @@ model User {
 
   accounts Account[]
   sessions Session[]
-  orders   Order[]
-  auditLogs AuditLog[]
 
   @@map("users")
 }
@@ -117,25 +116,8 @@ model Inventory {
   updatedAt    DateTime @updatedAt
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  movements StockMovement[]
 
   @@map("inventory")
-}
-
-model StockMovement {
-  id          String   @id @default(cuid())
-  inventoryId String
-  qty         Int
-  type        String   // IN, OUT, ADJUSTMENT
-  reason      String
-  note        String?
-  actorId     String?
-  createdAt   DateTime @default(now())
-
-  inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
-  actor      User?    @relation(fields: [actorId], references: [id])
-
-  @@map("stock_movements")
 }
 
 model Order {
@@ -156,7 +138,6 @@ model Order {
   updatedAt     DateTime    @updatedAt
 
   items OrderItem[]
-  auditLogs AuditLog[]
 
   @@map("orders")
 }
@@ -178,20 +159,6 @@ model OrderItem {
   product Product? @relation(fields: [productId], references: [id])
 
   @@map("order_items")
-}
-
-model AuditLog {
-  id       String   @id @default(cuid())
-  actorId  String?
-  action   String   // CREATE, UPDATE, DELETE
-  entity   String   // PRODUCT, ORDER, etc.
-  entityId String
-  details  Json?
-  createdAt DateTime @default(now())
-
-  actor User? @relation(fields: [actorId], references: [id])
-
-  @@map("audit_logs")
 }
 
 enum OrderStatus {

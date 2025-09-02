@@ -1,5 +1,4 @@
 // src/lib/prisma.ts
-// Safe, optional Prisma loader (Prisma generate na bhi ho to crash nahi)
 let cached: any | null = null;
 
 export async function getPrisma() {
@@ -11,8 +10,7 @@ export async function getPrisma() {
     cached = g.__prisma;
     return cached;
   } catch {
-    // @prisma/client available nahi – local dev me thik hai
-    return null;
+    return null; // don't throw during build or when client isn't generated yet
   }
 }
 
