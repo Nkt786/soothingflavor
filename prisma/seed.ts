@@ -8,337 +8,355 @@ async function main() {
   // Create categories
   const categories = await Promise.all([
     prisma.category.upsert({
-      where: { slug: 'vegan-sweets' },
+      where: { slug: 'meal-boxes' },
       update: {},
       create: {
-        slug: 'vegan-sweets',
-        name: 'Vegan Sweets',
-        description: 'Delicious plant-based sweet treats',
-        image: '/images/categories/vegan-sweets.jpg'
-      }
+        name: 'Meal Boxes',
+        slug: 'meal-boxes',
+        description: 'Complete meal packages with protein, carbs, and vegetables',
+        isActive: true,
+      },
     }),
     prisma.category.upsert({
-      where: { slug: 'low-cal-sauces' },
+      where: { slug: 'bowls' },
       update: {},
       create: {
-        slug: 'low-cal-sauces',
-        name: 'Low-Cal Sauces',
-        description: 'Flavorful sauces with fewer calories',
-        image: '/images/categories/low-cal-sauces.jpg'
-      }
+        name: 'Bowls',
+        slug: 'bowls',
+        description: 'Nutritious grain bowls with fresh ingredients',
+        isActive: true,
+      },
     }),
     prisma.category.upsert({
-      where: { slug: 'nut-butters' },
+      where: { slug: 'wraps' },
       update: {},
       create: {
-        slug: 'nut-butters',
-        name: 'Nut Butters',
-        description: 'Premium nut butters for healthy snacking',
-        image: '/images/categories/nut-butters.jpg'
-      }
+        name: 'Wraps',
+        slug: 'wraps',
+        description: 'Fresh and healthy wraps with whole grain tortillas',
+        isActive: true,
+      },
     }),
     prisma.category.upsert({
-      where: { slug: 'fresh-bakes' },
+      where: { slug: 'sandwiches' },
       update: {},
       create: {
-        slug: 'fresh-bakes',
-        name: 'Fresh Bakes',
-        description: 'Freshly baked healthy treats',
-        image: '/images/categories/fresh-bakes.jpg'
-      }
-    })
+        name: 'Sandwiches',
+        slug: 'sandwiches',
+        description: 'Wholesome sandwiches with fresh ingredients',
+        isActive: true,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: 'salads' },
+      update: {},
+      create: {
+        name: 'Salads',
+        slug: 'salads',
+        description: 'Fresh garden salads with light dressings',
+        isActive: true,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: 'juices' },
+      update: {},
+      create: {
+        name: 'Juices',
+        slug: 'juices',
+        description: 'Fresh fruit and vegetable juices',
+        isActive: true,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: 'meal-plans' },
+      update: {},
+      create: {
+        name: 'Meal Plans',
+        slug: 'meal-plans',
+        description: 'Subscription meal plans for different goals',
+        isActive: true,
+      },
+    }),
   ])
 
   console.log('✅ Categories created')
 
-  // Create meal plans - COMMENTED OUT - model doesn't exist in current schema
-  /*
-  const mealPlans = await Promise.all([
-    prisma.mealPlan.upsert({
-      where: { slug: 'weight-loss' },
-      update: {},
-      create: {
-        slug: 'weight-loss',
-        name: 'Weight Loss',
-        summary: 'Scientifically designed meals to help you lose weight sustainably',
-        longDescription: 'Our weight loss meal plan focuses on creating a calorie deficit while ensuring you get all the essential nutrients. Each meal is carefully portioned and balanced to keep you satisfied while promoting fat loss.',
-        caloriesMin: 1200,
-        caloriesMax: 1500,
-        macros: {
-          protein: '30%',
-          carbs: '40%',
-          fats: '30%'
-        },
-        isVeg: true,
-        isKeto: false,
-        images: ['/images/meal-plans/weight-loss-1.jpg', '/images/meal-plans/weight-loss-2.jpg'],
-        benefits: [
-          'Scientifically proven calorie deficit',
-          'High protein to preserve muscle mass',
-          'Fiber-rich for satiety',
-          'Balanced macronutrients'
-        ],
-        pricePerWeek: 1499.00
-      }
-    }),
-    prisma.mealPlan.upsert({
-      where: { slug: 'maintenance' },
-      update: {},
-      create: {
-        slug: 'maintenance',
-        name: 'Maintenance',
-        summary: 'Balanced meals to maintain your current weight and energy levels',
-        longDescription: 'Perfect for those who want to maintain their current weight while enjoying delicious, nutritious meals. This plan provides balanced nutrition without the stress of strict calorie counting.',
-        caloriesMin: 1800,
-        caloriesMax: 2200,
-        macros: {
-          protein: '25%',
-          carbs: '50%',
-          fats: '25%'
-        },
-        isVeg: true,
-        isKeto: false,
-        images: ['/images/meal-plans/maintenance-1.jpg', '/images/meal-plans/maintenance-2.jpg'],
-        benefits: [
-          'Balanced calorie intake',
-          'Sustained energy throughout the day',
-          'Variety of flavors and textures',
-          'Flexible meal timing'
-        ],
-        pricePerWeek: 1299.00
-      }
-    }),
-    prisma.mealPlan.upsert({
-      where: { slug: 'athletic' },
-      update: {},
-      create: {
-        slug: 'athletic',
-        name: 'Athletic',
-        summary: 'High-performance meals for active individuals and athletes',
-        longDescription: 'Designed for those with active lifestyles, this plan provides higher protein and complex carbohydrates to support muscle recovery and sustained energy during workouts.',
-        caloriesMin: 2200,
-        caloriesMax: 2800,
-        macros: {
-          protein: '35%',
-          carbs: '45%',
-          fats: '20%'
-        },
-        isVeg: false,
-        isKeto: false,
-        images: ['/images/meal-plans/athletic-1.jpg', '/images/meal-plans/athletic-2.jpg'],
-        benefits: [
-          'High protein for muscle building',
-          'Complex carbs for sustained energy',
-          'Optimal timing for workout recovery',
-          'Enhanced performance support'
-        ],
-        pricePerWeek: 1799.00
-      }
-    }),
-    prisma.mealPlan.upsert({
-      where: { slug: 'keto' },
-      update: {},
-      create: {
-        slug: 'keto',
-        name: 'Keto',
-        summary: 'Low-carb, high-fat meals to achieve ketosis',
-        longDescription: 'Our keto meal plan is designed to help you achieve and maintain ketosis through carefully calculated macronutrient ratios. Each meal is delicious and satisfying while keeping carbs minimal.',
-        caloriesMin: 1600,
-        caloriesMax: 2000,
-        macros: {
-          protein: '25%',
-          carbs: '5%',
-          fats: '70%'
-        },
-        isVeg: false,
-        isKeto: true,
-        images: ['/images/meal-plans/keto-1.jpg', '/images/meal-plans/keto-2.jpg'],
-        benefits: [
-          'Rapid fat burning',
-          'Stable blood sugar levels',
-          'Mental clarity and focus',
-          'Reduced inflammation'
-        ],
-        pricePerWeek: 1699.00
-      }
-    })
-  ])
-  console.log('✅ Meal plans created')
-  */
-
   // Create products
   const products = await Promise.all([
+    // Non-Veg Products
     prisma.product.upsert({
-      where: { slug: 'almond-butter' },
+      where: { slug: 'chicken-meal-box' },
       update: {},
       create: {
-        slug: 'almond-butter',
-        name: 'Premium Almond Butter',
-        description: 'Smooth and creamy almond butter made from premium California almonds',
-        categoryId: categories[2].id, // nut-butters
-        images: '/images/products/almond-butter.jpg',
-        priceMRP: 299.00,
-        priceSale: 249.00,
-        veg: true,
-        tags: 'organic,gluten-free',
-        calories: 90,
-        protein: 3
-      }
+        name: 'Chicken Meal Box',
+        slug: 'chicken-meal-box',
+        description: 'Protein-rich bowl with wholesome grains and seasonal veggies.',
+        categoryId: categories.find(c => c.slug === 'meal-boxes')?.id,
+        priceMRP: 299,
+        priceSale: 249,
+        calories: 450,
+        protein: 35,
+        veg: false,
+        isActive: true,
+        tags: ['high-protein', 'non-veg', 'meal-box'],
+        images: ['/images/products/chicken-meal-box.jpg'],
+      },
     }),
     prisma.product.upsert({
-      where: { slug: 'vegan-chocolate' },
+      where: { slug: 'chicken-fried-rice-bowl' },
       update: {},
       create: {
-        slug: 'vegan-chocolate',
-        name: 'Vegan Chocolate Chip Cookies',
-        description: 'Delicious plant-based cookies with dark chocolate chips',
-        categoryId: categories[0].id, // vegan-sweets
-        images: '/images/products/vegan-chocolate.jpg',
-        priceMRP: 199.00,
-        veg: true,
-        tags: 'vegan,gluten-free',
-        calories: 120,
-        protein: 2
-      }
+        name: 'Chicken Fried Rice Bowl',
+        slug: 'chicken-fried-rice-bowl',
+        description: 'Protein-rich bowl with wholesome grains and seasonal veggies.',
+        categoryId: categories.find(c => c.slug === 'bowls')?.id,
+        priceMRP: 239,
+        priceSale: 239,
+        calories: 420,
+        protein: 28,
+        veg: false,
+        isActive: true,
+        tags: ['high-protein', 'non-veg', 'bowl'],
+        images: ['/images/products/chicken-fried-rice-bowl.jpg'],
+      },
     }),
     prisma.product.upsert({
-      where: { slug: 'healthy-sauce' },
+      where: { slug: 'tandoori-chicken-wrap' },
       update: {},
       create: {
-        slug: 'healthy-sauce',
-        name: 'Low-Cal Pesto Sauce',
-        description: 'Flavorful pesto sauce with reduced calories and maximum taste',
-        categoryId: categories[1].id, // low-cal-sauces
-        images: '/images/products/healthy-sauce.jpg',
-        priceMRP: 149.00,
+        name: 'Tandoori Chicken Wrap',
+        slug: 'tandoori-chicken-wrap',
+        description: 'Grilled filling wrapped with fresh greens.',
+        categoryId: categories.find(c => c.slug === 'wraps')?.id,
+        priceMRP: 219,
+        priceSale: 219,
+        calories: 380,
+        protein: 25,
+        veg: false,
+        isActive: true,
+        tags: ['high-protein', 'non-veg', 'wrap'],
+        images: ['/images/products/tandoori-chicken-wrap.jpg'],
+      },
+    }),
+    // Veg Products
+    prisma.product.upsert({
+      where: { slug: 'quinoa-power-bowl' },
+      update: {},
+      create: {
+        name: 'Quinoa Power Bowl',
+        slug: 'quinoa-power-bowl',
+        description: 'Protein-rich bowl with wholesome grains and seasonal veggies.',
+        categoryId: categories.find(c => c.slug === 'bowls')?.id,
+        priceMRP: 199,
+        priceSale: 199,
+        calories: 380,
+        protein: 22,
         veg: true,
-        tags: 'low-calorie,organic',
-        calories: 45,
-        protein: 1
-      }
-    })
+        isActive: true,
+        tags: ['high-protein', 'veg', 'bowl'],
+        images: ['/images/products/quinoa-power-bowl.jpg'],
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: 'veggie-wrap' },
+      update: {},
+      create: {
+        name: 'Veggie Wrap',
+        slug: 'veggie-wrap',
+        description: 'Grilled filling wrapped with fresh greens.',
+        categoryId: categories.find(c => c.slug === 'wraps')?.id,
+        priceMRP: 179,
+        priceSale: 179,
+        calories: 320,
+        protein: 18,
+        veg: true,
+        isActive: true,
+        tags: ['veg', 'wrap'],
+        images: ['/images/products/veggie-wrap.jpg'],
+      },
+    }),
+    // Meal Plans
+    prisma.product.upsert({
+      where: { slug: 'deluxe-meal-plan' },
+      update: {},
+      create: {
+        name: 'Deluxe Meal Plan',
+        slug: 'deluxe-meal-plan',
+        description: 'Premium lunch and dinner plan with freshly cooked, portion-controlled, macro-balanced meals using premium ingredients.',
+        categoryId: categories.find(c => c.slug === 'meal-plans')?.id,
+        priceMRP: 12999,
+        priceSale: 12499,
+        calories: 2000,
+        protein: 120,
+        veg: true,
+        isActive: true,
+        tags: ['meal-plan', 'premium', 'lunch-dinner'],
+        images: ['/images/meal-plans/deluxe-meal-plan.jpg'],
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: 'regular-meal-plan' },
+      update: {},
+      create: {
+        name: 'Regular Meal Plan',
+        slug: 'regular-meal-plan',
+        description: 'Flexible meal plan offering lunch or dinner with freshly cooked, portion-controlled, macro-balanced meals.',
+        categoryId: categories.find(c => c.slug === 'meal-plans')?.id,
+        priceMRP: 5999,
+        priceSale: 5499,
+        calories: 1800,
+        protein: 90,
+        veg: true,
+        isActive: true,
+        tags: ['meal-plan', 'flexible', 'lunch-or-dinner'],
+        images: ['/images/meal-plans/regular-meal-plan.jpg'],
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: 'all-day-salad-juice' },
+      update: {},
+      create: {
+        name: 'All Day Salad & Juice Plan',
+        slug: 'all-day-salad-juice',
+        description: 'Nutrient-rich vegetable and fruit salads with fresh juices, perfect for detox and healthy living.',
+        categoryId: categories.find(c => c.slug === 'meal-plans')?.id,
+        priceMRP: 4999,
+        priceSale: 4499,
+        calories: 1200,
+        protein: 60,
+        veg: true,
+        isActive: true,
+        tags: ['meal-plan', 'detox', 'salad-juice'],
+        images: ['/images/meal-plans/salad-juice-plan.jpg'],
+      },
+    }),
   ])
 
   console.log('✅ Products created')
 
-  // Create testimonials - COMMENTED OUT - model doesn't exist in current schema
-  /*
-  const testimonials = await Promise.all([
-    prisma.testimonial.upsert({
-      where: { id: 'testimonial-1' },
-      update: {},
-      create: {
-        id: 'testimonial-1',
-        name: 'Priya Sharma',
-        avatarUrl: '/images/testimonials/priya.jpg',
-        quote: 'Soothing Flavor has completely transformed my relationship with food. The weight loss plan is not just effective but also incredibly delicious!',
-        rating: 5,
-        city: 'Nagpur'
-      }
-    }),
-    prisma.testimonial.upsert({
-      where: { id: 'testimonial-2' },
-      update: {},
-      create: {
-        id: 'testimonial-2',
-        name: 'Rahul Mehta',
-        avatarUrl: '/images/testimonials/rahul.jpg',
-        quote: 'As a fitness enthusiast, I needed meals that could fuel my workouts. The Athletic plan delivers exactly what I need with amazing taste.',
-        rating: 5,
-        city: 'Delhi'
-      }
-    }),
-    prisma.testimonial.upsert({
-      where: { id: 'testimonial-3' },
-      update: {},
-      create: {
-        id: 'testimonial-3',
-        name: 'Anjali Patel',
-        avatarUrl: '/images/testimonials/anjali.jpg',
-        quote: 'The keto plan helped me achieve my health goals while enjoying every single meal. The variety and quality are outstanding!',
-        rating: 5,
-        city: 'Bangalore'
-      }
-    })
-  ])
-  console.log('✅ Testimonials created')
-  */
+  // Create inventory for products
+  await Promise.all(
+    products.map(product =>
+      prisma.inventory.upsert({
+        where: { productId: product.id },
+        update: {},
+        create: {
+          productId: product.id,
+          stockQty: Math.floor(Math.random() * 50) + 10, // Random stock between 10-60
+          reorderLevel: 10,
+          sku: `SKU-${product.slug.toUpperCase()}`,
+          unit: 'g',
+        },
+      })
+    )
+  )
 
-  // Create FAQs - COMMENTED OUT - model doesn't exist in current schema
-  /*
-  const faqs = await Promise.all([
-    prisma.faq.upsert({
-      where: { id: 'faq-1' },
-      update: {},
-      create: {
-        id: 'faq-1',
-        question: 'How does the meal plan delivery work?',
-        answer: 'We deliver fresh, prepared meals to your doorstep every week. You can choose your preferred delivery day and time slot during checkout.',
-        category: 'Delivery'
-      }
-    }),
-    prisma.faq.upsert({
-      where: { id: 'faq-2' },
-      update: {},
-      create: {
-        id: 'faq-2',
-        question: 'Can I pause or skip weeks?',
-        answer: 'Yes! You can pause your subscription for up to 4 weeks or skip specific weeks. Simply manage this through your account dashboard.',
-        category: 'Subscription'
-      }
-    }),
-    prisma.faq.upsert({
-      where: { id: 'faq-3' },
-      update: {},
-      create: {
-        id: 'faq-3',
-        question: 'Are the meals suitable for vegetarians?',
-        answer: 'We offer both vegetarian and non-vegetarian options. You can choose your preference when selecting a meal plan.',
-        category: 'Dietary'
-      }
-    })
-  ])
-  console.log('✅ FAQs created')
-  */
+  console.log('✅ Inventory created')
 
-  // Create service areas - COMMENTED OUT - model doesn't exist in current schema
-  /*
-  const serviceAreas = await Promise.all([
-    prisma.serviceArea.upsert({
-      where: { id: 'area-1' },
+  // Create admin users
+  const adminUsers = await Promise.all([
+    prisma.user.upsert({
+      where: { email: 'admin@demo.local' },
       update: {},
       create: {
-        id: 'area-1',
-        city: 'Nagpur',
-        pincode: '440001',
-        active: true
-      }
+        name: 'Admin User',
+        email: 'admin@demo.local',
+        role: 'ADMIN',
+      },
     }),
-    prisma.serviceArea.upsert({
-      where: { id: 'area-2' },
+    prisma.user.upsert({
+      where: { email: 'manager@demo.com' },
       update: {},
       create: {
-        id: 'area-2',
-        city: 'Delhi',
-        pincode: '110001',
-        active: true
-      }
+        name: 'Manager User',
+        email: 'manager@demo.com',
+        role: 'MANAGER',
+      },
     }),
-    prisma.serviceArea.upsert({
-      where: { id: 'area-3' },
+    prisma.user.upsert({
+      where: { email: 'staff@demo.com' },
       update: {},
       create: {
-        id: 'area-3',
-        city: 'Bangalore',
-        pincode: '560001',
-        active: true
-      }
-    })
+        name: 'Staff User',
+        email: 'staff@demo.com',
+        role: 'STAFF',
+      },
+    }),
   ])
-  console.log('✅ Service areas created')
-  */
+
+  console.log('✅ Admin users created')
+
+  // Create sample orders
+  const sampleOrders = await Promise.all([
+    prisma.order.create({
+      data: {
+        orderNumber: 'SF-1234567890',
+        customerName: 'Anjali Sharma',
+        customerEmail: 'anjali@example.com',
+        phone: '9876543210',
+        address: JSON.stringify({
+          line1: '123 Main Street',
+          city: 'Nagpur',
+          pincode: '440001',
+        }),
+        status: 'NEW',
+        paymentStatus: 'PENDING',
+        subtotal: 12499,
+        total: 12499,
+        items: {
+          create: [
+            {
+              productName: 'Deluxe Meal Plan',
+              qty: 1,
+              price: 12499,
+              lineTotal: 12499,
+            },
+          ],
+        },
+      },
+    }),
+    prisma.order.create({
+      data: {
+        orderNumber: 'SF-1234567891',
+        customerName: 'Priya Patel',
+        customerEmail: 'priya@example.com',
+        phone: '9876543211',
+        address: JSON.stringify({
+          line1: '456 Oak Avenue',
+          city: 'Nagpur',
+          pincode: '440002',
+        }),
+        status: 'PREPARING',
+        paymentStatus: 'PAID',
+        subtotal: 5499,
+        total: 5499,
+        items: {
+          create: [
+            {
+              productName: 'Regular Meal Plan',
+              qty: 1,
+              price: 5499,
+              lineTotal: 5499,
+            },
+          ],
+        },
+      },
+    }),
+  ])
+
+  console.log('✅ Sample orders created')
 
   console.log('🎉 Database seeding completed successfully!')
+  console.log('\n📋 Summary:')
+  console.log(`- ${categories.length} categories created`)
+  console.log(`- ${products.length} products created`)
+  console.log(`- ${adminUsers.length} admin users created`)
+  console.log(`- ${sampleOrders.length} sample orders created`)
+  console.log('\n🔑 Admin Login Credentials:')
+  console.log('- Email: admin@demo.local (ADMIN)')
+  console.log('- Email: manager@demo.com (MANAGER)')
+  console.log('- Email: staff@demo.com (STAFF)')
+  console.log('\n💡 Note: These are demo users without passwords. Use NextAuth for real authentication.')
 }
 
 main()

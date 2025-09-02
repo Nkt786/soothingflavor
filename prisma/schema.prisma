@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,20 +11,19 @@ datasource db {
 }
 
 model User {
-  id                 String              @id @default(cuid())
-  name               String?
-  email              String              @unique
-  phone              String?
-  emailVerified      DateTime?
-  image              String?
-  role               Role                @default(USER)
-  passwordHash       String?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  accounts           Account[]
-  auditLogs          AuditLog[]
-  inventoryMovements InventoryMovement[]
-  sessions           Session[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("USER") // USER, ADMIN, MANAGER, STAFF
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  orders   Order[]
+  auditLogs AuditLog[]
 
   @@map("users")
 }
@@ -32,14 +34,15 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -48,7 +51,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
+  userId      String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -66,153 +69,144 @@ model VerificationToken {
 
 model Category {
   id          String    @id @default(cuid())
+  name        String    @unique
   slug        String    @unique
-  name        String
   description String?
   image       String?
   isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  products    Product[]
+
+  products Product[]
 
   @@map("categories")
 }
 
 model Product {
-  id                 String              @id @default(cuid())
-  slug               String              @unique
-  name               String
-  description        String?
-  categoryId         String
-  images             String
-  veg                Boolean             @default(true)
-  priceMRP           Float
-  priceSale          Float?
-  calories           Int?
-  protein            Int?
-  tags               String
-  isActive           Boolean             @default(true)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  inventory          Inventory?
-  inventoryMovements InventoryMovement[]
-  orderItems         OrderItem[]
-  category           Category            @relation(fields: [categoryId], references: [id])
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  categoryId  String?
+  priceMRP    Float
+  priceSale   Float?
+  calories    Int?
+  protein     Float?
+  veg         Boolean   @default(true)
+  isActive    Boolean   @default(true)
+  tags        String[]  @default([])
+  images      String[]  @default([])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  category Category? @relation(fields: [categoryId], references: [id])
+  inventory Inventory?
+  orderItems OrderItem[]
 
   @@map("products")
 }
 
 model Inventory {
-  id                 String              @id @default(cuid())
-  productId          String              @unique
-  stockQty           Int                 @default(0)
-  reorderLevel       Int                 @default(10)
-  sku                String              @unique
-  unit               String              @default("g")
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  product            Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
-  inventoryMovements InventoryMovement[]
+  id           String   @id @default(cuid())
+  productId    String   @unique
+  stockQty     Int      @default(0)
+  reorderLevel Int      @default(10)
+  sku          String   @unique
+  unit         String   @default("g")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  movements StockMovement[]
 
   @@map("inventory")
 }
 
-model InventoryMovement {
-  id        String         @id @default(cuid())
-  productId String
-  qty       Int
-  reason    MovementReason
-  refId     String?
-  note      String?
-  actorId   String
-  createdAt DateTime       @default(now())
-  inventory Inventory      @relation(fields: [productId], references: [productId])
-  actor     User           @relation(fields: [actorId], references: [id])
-  product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+model StockMovement {
+  id          String   @id @default(cuid())
+  inventoryId String
+  qty         Int
+  type        String   // IN, OUT, ADJUSTMENT
+  reason      String
+  note        String?
+  actorId     String?
+  createdAt   DateTime @default(now())
 
-  @@map("inventory_movements")
+  inventory Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  actor      User?    @relation(fields: [actorId], references: [id])
+
+  @@map("stock_movements")
 }
 
 model Order {
-  id            String        @id @default(cuid())
-  orderNumber   String        @unique
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
   customerName  String
-  customerEmail String
+  customerEmail String?
   phone         String
-  address       String
-  status        OrderStatus   @default(NEW)
+  address       String      @db.Text
+  status        OrderStatus @default(NEW)
   paymentStatus PaymentStatus @default(PENDING)
   subtotal      Float
-  tax           Float         @default(0)
-  shipping      Float         @default(0)
-  discount      Float         @default(0)
+  discount      Float        @default(0)
   total         Float
-  notes         String?
-  internalNotes String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  items         OrderItem[]
+  notes         String?     @db.Text
+  internalNotes String?      @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  items OrderItem[]
+  auditLogs AuditLog[]
 
   @@map("orders")
 }
 
 model OrderItem {
-  id           String   @id @default(cuid())
-  orderId      String
-  productId    String?
-  productName  String
-  productSlug  String?
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String?
+  productName String
+  productSlug String?
   productImage String?
-  veg          Boolean?
-  qty          Int
-  price        Float
-  lineTotal    Float
-  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product      Product? @relation(fields: [productId], references: [id])
+  veg         Boolean?
+  qty         Int
+  price       Float
+  lineTotal   Float
+  createdAt   DateTime @default(now())
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
 
   @@map("order_items")
 }
 
 model AuditLog {
-  id        String   @id @default(cuid())
-  actorId   String
-  action    String
-  entity    String
-  entityId  String?
-  details   String?
+  id       String   @id @default(cuid())
+  actorId  String?
+  action   String   // CREATE, UPDATE, DELETE
+  entity   String   // PRODUCT, ORDER, etc.
+  entityId String
+  details  Json?
   createdAt DateTime @default(now())
-  actor     User     @relation(fields: [actorId], references: [id])
+
+  actor User? @relation(fields: [actorId], references: [id])
 
   @@map("audit_logs")
 }
 
-enum Role {
-  USER
-  ADMIN
-  MANAGER
-  STAFF
-}
-
 enum OrderStatus {
   NEW
-  ACCEPTED
+  CONFIRMED
   PREPARING
+  READY
   OUT_FOR_DELIVERY
   DELIVERED
-  DECLINED
   CANCELLED
 }
 
 enum PaymentStatus {
   PENDING
   PAID
+  FAILED
   REFUNDED
-}
-
-enum MovementReason {
-  PURCHASE
-  ADJUSTMENT
-  ORDER
-  RETURN
-  WASTAGE
 }
