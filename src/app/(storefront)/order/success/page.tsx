@@ -1,12 +1,12 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 
 type OrderItem = { productName?: string; productId?: string; qty: number; price: number; lineTotal?: number };
 type Order = { id?: string; orderNumber?: string; customerName?: string; total?: number; items?: OrderItem[] };
 
-export default function OrderSuccess() {
+function OrderSuccessContent() {
   const sp = useSearchParams();
   const qId = sp.get("orderId") || sp.get("id") || "";
   const [order, setOrder] = useState<Order | null>(null);
@@ -74,5 +74,13 @@ export default function OrderSuccess() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OrderSuccess() {
+  return (
+    <Suspense fallback={<div className="max-w-2xl mx-auto p-6"><div className="animate-pulse h-24 bg-gray-200 rounded" /></div>}>
+      <OrderSuccessContent />
+    </Suspense>
   );
 }
