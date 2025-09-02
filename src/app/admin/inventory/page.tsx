@@ -2,13 +2,16 @@
 
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Search, Filter, Download, Plus } from 'lucide-react'
+import { Plus, Search, Filter, Download, Package, TrendingUp, TrendingDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { InventoryTable } from '@/components/admin/InventoryTable'
 import { StockMovementForm } from '@/components/admin/StockMovementForm'
 import { api } from '@/lib/api'
+import { withParams } from '@/lib/url'
 import { toast } from 'sonner'
 
 export default function InventoryPage() {
@@ -22,12 +25,10 @@ export default function InventoryPage() {
   const { data: inventoryData, isLoading } = useQuery({
     queryKey: ['admin-inventory', searchQuery, lowStockFilter],
     queryFn: async () => {
-      const params = new URLSearchParams()
-      if (searchQuery) params.append('search', searchQuery)
-      if (lowStockFilter) params.append('lowStock', lowStockFilter.toString())
-      
-      const url = `/api/admin/inventory${params.toString() ? `?${params.toString()}` : ''}`
-      const response = await api.get(url) as { inventory: any[]; pagination: any }
+      const response = await api.get(withParams('/api/admin/inventory', {
+        search: searchQuery,
+        lowStock: lowStockFilter
+      })) as any
       return response
     },
     staleTime: 2 * 60 * 1000, // 2 minutes

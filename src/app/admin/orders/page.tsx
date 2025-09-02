@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { api } from '@/lib/api'
+import { withParams } from '@/lib/url'
 import { toast } from 'sonner'
 import { OrdersTable } from '@/components/admin/OrdersTable'
 import { OrderDetailDrawer } from '@/components/admin/OrderDetailDrawer'
@@ -23,12 +24,10 @@ export default function OrdersPage() {
   const { data: ordersData, isLoading } = useQuery({
     queryKey: ['admin-orders', searchQuery, statusFilter],
     queryFn: async () => {
-      const params = new URLSearchParams()
-      if (searchQuery) params.append('search', searchQuery)
-      if (statusFilter) params.append('status', statusFilter)
-      
-      const url = `/api/admin/orders${params.toString() ? `?${params.toString()}` : ''}`
-      const response = await api.get(url) as any
+      const response = await api.get(withParams('/api/admin/orders', {
+        search: searchQuery,
+        status: statusFilter
+      })) as any
       return response
     },
     staleTime: 2 * 60 * 1000, // 2 minutes

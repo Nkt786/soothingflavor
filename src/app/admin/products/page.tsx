@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { ProductsTable } from '@/components/admin/ProductsTable'
 import { ProductForm } from '@/components/admin/ProductForm'
 import { api } from '@/lib/api'
+import { withParams } from '@/lib/url'
 
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -20,13 +21,14 @@ export default function ProductsPage() {
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['admin-products', searchQuery, categoryFilter, statusFilter],
-    queryFn: () => api.get('/api/admin/products', {
-      params: {
+    queryFn: async () => {
+      const response = await api.get(withParams('/api/admin/products', {
         search: searchQuery,
         category: categoryFilter,
         status: statusFilter
-      }
-    }),
+      })) as any
+      return response
+    },
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 

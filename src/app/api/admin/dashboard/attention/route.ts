@@ -7,11 +7,11 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session || !['ADMIN', 'MANAGER', 'STAFF'].includes(session.user?.role as string)) {
+    if (!session || !['ADMIN', 'MANAGER', 'STAFF'].includes((session.user as any)?.role as string)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const attentionItems = []
+    const attentionItems: any[] = []
 
     // Get NEW orders that need attention
     const newOrders = await prisma.order.findMany({
