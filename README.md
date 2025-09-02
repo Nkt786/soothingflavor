@@ -2,6 +2,10 @@
 
 A modern, responsive web application built with Next.js 15, TypeScript, and Tailwind CSS, designed to provide healthy meal plans, wellness coaching, and nutritious products.
 
+🌐 **Live Demo**: [View on Netlify](https://soothingflavor.netlify.app)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/your-site-id/deploy-status)](https://app.netlify.com/sites/soothingflavor/deploys)
+
 ## 🚀 Features
 
 ### Core Functionality
@@ -216,7 +220,31 @@ npm run dev:free        # Kill port 3001 and start dev
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
+### Netlify (Currently Live)
+🌐 **Live Site**: [https://soothingflavor.netlify.app](https://soothingflavor.netlify.app)
+
+The project is currently deployed and live on Netlify with the following configuration:
+
+1. **Automatic Deployments** - Connected to GitHub repository
+2. **Environment Variables** - Configured for production
+3. **Next.js Plugin** - Optimized for Netlify deployment
+4. **Database** - PostgreSQL hosted on Netlify
+
+#### Netlify Configuration
+- **Build Command**: `npm run build`
+- **Publish Directory**: `.next`
+- **Node Version**: 20
+- **Next.js Plugin**: Enabled for optimal performance
+
+#### Environment Variables (Set in Netlify)
+```env
+DATABASE_URL="postgresql://your-production-db-url"
+NEXTAUTH_SECRET="your-production-secret"
+NEXTAUTH_URL="https://soothingflavor.netlify.app"
+NEXT_PUBLIC_API_URL="https://soothingflavor.netlify.app"
+```
+
+### Vercel (Alternative)
 1. Push your code to GitHub
 2. Connect repository to Vercel
 3. Configure environment variables:
@@ -235,7 +263,6 @@ npm run db:seed:simple
 ```
 
 ### Other Platforms
-- Netlify (requires static export config)
 - Railway
 - DigitalOcean App Platform
 - AWS Amplify
@@ -271,6 +298,7 @@ npm run db:seed:simple
 - [x] Order management system
 - [x] Inventory tracking
 - [x] Role-based authentication
+- [x] Netlify deployment with automatic builds
 - [ ] Payment integration (Stripe)
 - [ ] Real-time chat support
 - [ ] Mobile app (React Native)
@@ -311,6 +339,8 @@ For support and questions:
 
 **Built with ❤️ for healthy living and wellness** 
 
-**Last deployment test:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+**Live on Netlify**: [https://soothingflavor.netlify.app](https://soothingflavor.netlify.app)
+
+**Last updated**: December 2024
  
  

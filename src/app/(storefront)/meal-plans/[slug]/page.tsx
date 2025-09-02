@@ -19,158 +19,99 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 const mealPlans = [
   {
-    slug: 'weight-loss',
-    name: 'Weight Loss Meal Plan',
-    description: 'A balanced, calorie-controlled meal plan designed to help you achieve sustainable weight loss while maintaining energy and satisfaction.',
-    duration: '4 weeks',
-    calories: '1,200-1,500',
-    difficulty: 'Beginner',
-    price: '$89',
-    features: [
-      'Calorie-controlled meals',
-      'High protein content',
-      'Fiber-rich foods',
-      'Portion control guidance',
-      'Weekly shopping lists',
-      'Recipe modifications'
-    ],
-    meals: {
-      breakfast: [
-        { name: 'Greek Yogurt Parfait', calories: 280, protein: '18g', carbs: '32g', fat: '8g' },
-        { name: 'Oatmeal with Berries', calories: 320, protein: '12g', carbs: '45g', fat: '10g' },
-        { name: 'Egg White Omelette', calories: 240, protein: '20g', carbs: '8g', fat: '12g' }
-      ],
-      lunch: [
-        { name: 'Grilled Chicken Salad', calories: 380, protein: '35g', carbs: '15g', fat: '18g' },
-        { name: 'Quinoa Bowl', calories: 420, protein: '18g', carbs: '52g', fat: '16g' },
-        { name: 'Turkey Wrap', calories: 360, protein: '28g', carbs: '38g', fat: '12g' }
-      ],
-      dinner: [
-        { name: 'Salmon with Vegetables', calories: 450, protein: '42g', carbs: '22g', fat: '20g' },
-        { name: 'Lean Beef Stir-Fry', calories: 480, protein: '38g', carbs: '28g', fat: '24g' },
-        { name: 'Vegetarian Chili', calories: 380, protein: '22g', carbs: '45g', fat: '12g' }
-      ],
-      snacks: [
-        { name: 'Almonds', calories: 160, protein: '6g', carbs: '6g', fat: '14g' },
-        { name: 'Apple with Peanut Butter', calories: 200, protein: '4g', carbs: '28g', fat: '10g' },
-        { name: 'Protein Smoothie', calories: 180, protein: '20g', carbs: '18g', fat: '4g' }
-      ]
-    }
-  },
-  {
-    slug: 'athletic',
-    name: 'Athletic Performance Meal Plan',
-    description: 'Optimize your athletic performance with this high-energy meal plan designed for active individuals and athletes.',
-    duration: '4 weeks',
-    calories: '2,200-2,800',
-    difficulty: 'Intermediate',
-    price: '$99',
-    features: [
-      'High protein meals',
-      'Complex carbohydrates',
-      'Performance timing',
-      'Recovery nutrition',
-      'Hydration guidance',
-      'Pre/post workout meals'
-    ],
-    meals: {
-      breakfast: [
-        { name: 'Protein Pancakes', calories: 480, protein: '32g', carbs: '58g', fat: '16g' },
-        { name: 'Breakfast Burrito', calories: 520, protein: '28g', carbs: '45g', fat: '22g' },
-        { name: 'Smoothie Bowl', calories: 450, protein: '24g', carbs: '52g', fat: '18g' }
-      ],
-      lunch: [
-        { name: 'Chicken Rice Bowl', calories: 580, protein: '42g', carbs: '68g', fat: '18g' },
-        { name: 'Tuna Pasta Salad', calories: 520, protein: '38g', carbs: '52g', fat: '20g' },
-        { name: 'Beef and Sweet Potato', calories: 560, protein: '45g', carbs: '58g', fat: '22g' }
-      ],
-      dinner: [
-        { name: 'Grilled Salmon with Rice', calories: 620, protein: '48g', carbs: '58g', fat: '24g' },
-        { name: 'Lean Steak with Potatoes', calories: 680, protein: '52g', carbs: '62g', fat: '28g' },
-        { name: 'Chicken Stir-Fry', calories: 580, protein: '42g', carbs: '52g', fat: '26g' }
-      ],
-      snacks: [
-        { name: 'Protein Bar', calories: 240, protein: '20g', carbs: '28g', fat: '8g' },
-        { name: 'Greek Yogurt with Granola', calories: 280, protein: '18g', carbs: '32g', fat: '10g' },
-        { name: 'Trail Mix', calories: 320, protein: '12g', carbs: '28g', fat: '20g' }
-      ]
-    }
-  },
-  {
-    slug: 'maintenance',
-    name: 'Maintenance & Wellness Meal Plan',
-    description: 'Maintain your current weight and improve overall wellness with this balanced, nutrient-rich meal plan.',
-    duration: '4 weeks',
+    slug: 'deluxe-meal',
+    name: 'Deluxe Meal Plan',
+    description: 'Premium lunch and dinner plan with freshly cooked, portion-controlled, macro-balanced meals using premium ingredients.',
+    duration: 'Monthly',
     calories: '1,800-2,200',
-    difficulty: 'Beginner',
-    price: '$79',
+    difficulty: 'All Levels',
+    price: '₹12,499',
     features: [
-      'Balanced macronutrients',
-      'Whole food focus',
-      'Variety of cuisines',
-      'Flexible portions',
-      'Healthy fats included',
-      'Antioxidant-rich foods'
+      'Freshly cooked meals',
+      'Portion-controlled servings',
+      'Macro-balanced nutrition',
+      'Premium ingredients',
+      'Lunch and dinner included',
+      'Flexible delivery timing'
     ],
     meals: {
-      breakfast: [
-        { name: 'Avocado Toast', calories: 380, protein: '16g', carbs: '42g', fat: '18g' },
-        { name: 'Smoothie with Nuts', calories: 420, protein: '20g', carbs: '48g', fat: '20g' },
-        { name: 'Eggs with Vegetables', calories: 360, protein: '24g', carbs: '18g', fat: '22g' }
-      ],
       lunch: [
-        { name: 'Mediterranean Salad', calories: 420, protein: '22g', carbs: '28g', fat: '26g' },
-        { name: 'Soup and Sandwich', calories: 480, protein: '26g', carbs: '52g', fat: '20g' },
-        { name: 'Buddha Bowl', calories: 440, protein: '24g', carbs: '48g', fat: '22g' }
+        { name: 'Grilled Chicken with Quinoa', calories: 450, protein: '35g', carbs: '45g', fat: '18g' },
+        { name: 'Salmon with Brown Rice', calories: 480, protein: '38g', carbs: '42g', fat: '22g' },
+        { name: 'Vegetarian Buddha Bowl', calories: 420, protein: '22g', carbs: '48g', fat: '16g' }
       ],
       dinner: [
-        { name: 'Grilled Fish with Quinoa', calories: 520, protein: '38g', carbs: '48g', fat: '24g' },
-        { name: 'Vegetarian Pasta', calories: 480, protein: '22g', carbs: '58g', fat: '18g' },
-        { name: 'Chicken with Vegetables', calories: 460, protein: '36g', carbs: '32g', fat: '26g' }
-      ],
-      snacks: [
-        { name: 'Hummus with Veggies', calories: 180, protein: '8g', carbs: '22g', fat: '10g' },
-        { name: 'Dark Chocolate', calories: 160, protein: '4g', carbs: '18g', fat: '12g' },
-        { name: 'Mixed Berries', calories: 120, protein: '2g', carbs: '26g', fat: '2g' }
+        { name: 'Lean Beef Stir-Fry', calories: 460, protein: '42g', carbs: '38g', fat: '20g' },
+        { name: 'Grilled Fish with Vegetables', calories: 440, protein: '36g', carbs: '32g', fat: '24g' },
+        { name: 'Chicken Curry with Rice', calories: 480, protein: '38g', carbs: '45g', fat: '18g' }
       ]
     }
   },
   {
-    slug: 'keto',
-    name: 'Keto Meal Plan',
-    description: 'Achieve ketosis with this high-fat, low-carbohydrate meal plan designed for fat burning and mental clarity.',
-    duration: '4 weeks',
-    calories: '1,600-2,000',
-    difficulty: 'Advanced',
-    price: '$109',
+    slug: 'regular-meal',
+    name: 'Regular Meal Plan',
+    description: 'Flexible meal plan offering lunch or dinner with freshly cooked, portion-controlled, macro-balanced meals.',
+    duration: 'Monthly',
+    calories: '1,500-1,800',
+    difficulty: 'All Levels',
+    price: '₹5,499',
     features: [
-      'High healthy fats',
-      'Low carbohydrates',
-      'Moderate protein',
-      'Keto-friendly foods',
-      'Electrolyte guidance',
-      'Transition support'
+      'Freshly cooked meals',
+      'Portion-controlled servings',
+      'Macro-balanced nutrition',
+      'Flexible timing',
+      'Lunch or dinner choice',
+      'Cost-effective option'
+    ],
+    meals: {
+      lunch: [
+        { name: 'Chicken Salad Wrap', calories: 380, protein: '28g', carbs: '35g', fat: '16g' },
+        { name: 'Vegetable Pasta', calories: 420, protein: '18g', carbs: '52g', fat: '14g' },
+        { name: 'Rice and Dal Bowl', calories: 400, protein: '24g', carbs: '48g', fat: '12g' }
+      ],
+      dinner: [
+        { name: 'Grilled Chicken with Rice', calories: 440, protein: '32g', carbs: '42g', fat: '18g' },
+        { name: 'Fish Curry with Roti', calories: 420, protein: '26g', carbs: '38g', fat: '20g' },
+        { name: 'Vegetable Biryani', calories: 460, protein: '22g', carbs: '58g', fat: '16g' }
+      ]
+    }
+  },
+  {
+    slug: 'all-day-salad-juice',
+    name: 'All Day Salad & Juice Plan',
+    description: 'Nutrient-rich vegetable and fruit salads with fresh juices, perfect for detox and healthy living.',
+    duration: 'Monthly',
+    calories: '800-1,200',
+    difficulty: 'Beginner',
+    price: '₹4,499',
+    features: [
+      'Freshly prepared salads',
+      'Portion-controlled servings',
+      'Nutrient-rich ingredients',
+      'Detox friendly',
+      'Fresh fruit juices',
+      'Light and healthy'
     ],
     meals: {
       breakfast: [
-        { name: 'Keto Smoothie', calories: 420, protein: '18g', carbs: '8g', fat: '36g' },
-        { name: 'Eggs with Avocado', calories: 480, protein: '24g', carbs: '6g', fat: '42g' },
-        { name: 'Bacon and Cheese', calories: 520, protein: '28g', carbs: '4g', fat: '44g' }
+        { name: 'Green Smoothie Bowl', calories: 280, protein: '12g', carbs: '38g', fat: '8g' },
+        { name: 'Fruit Salad with Yogurt', calories: 240, protein: '8g', carbs: '42g', fat: '6g' },
+        { name: 'Vegetable Juice Blend', calories: 180, protein: '6g', carbs: '32g', fat: '4g' }
       ],
       lunch: [
-        { name: 'Caesar Salad', calories: 480, protein: '32g', carbs: '8g', fat: '38g' },
-        { name: 'Bunless Burger', calories: 520, protein: '36g', carbs: '6g', fat: '42g' },
-        { name: 'Tuna with Mayo', calories: 460, protein: '28g', carbs: '4g', fat: '38g' }
+        { name: 'Mixed Green Salad', calories: 320, protein: '16g', carbs: '28g', fat: '18g' },
+        { name: 'Quinoa Vegetable Bowl', calories: 360, protein: '18g', carbs: '42g', fat: '14g' },
+        { name: 'Fruit and Nut Salad', calories: 340, protein: '12g', carbs: '38g', fat: '16g' }
       ],
       dinner: [
-        { name: 'Steak with Butter', calories: 580, protein: '42g', carbs: '6g', fat: '46g' },
-        { name: 'Salmon with Avocado', calories: 520, protein: '38g', carbs: '8g', fat: '42g' },
-        { name: 'Chicken with Cheese', calories: 480, protein: '32g', carbs: '4g', fat: '38g' }
+        { name: 'Light Vegetable Soup', calories: 280, protein: '14g', carbs: '32g', fat: '12g' },
+        { name: 'Fresh Fruit Platter', calories: 260, protein: '8g', carbs: '45g', fat: '6g' },
+        { name: 'Green Juice Cleanse', calories: 220, protein: '6g', carbs: '38g', fat: '4g' }
       ],
       snacks: [
-        { name: 'Macadamia Nuts', calories: 200, protein: '4g', carbs: '4g', fat: '20g' },
-        { name: 'Cheese Cubes', calories: 160, protein: '12g', carbs: '2g', fat: '14g' },
-        { name: 'Olives', calories: 120, protein: '2g', carbs: '4g', fat: '12g' }
+        { name: 'Fresh Fruit Juice', calories: 160, protein: '4g', carbs: '28g', fat: '2g' },
+        { name: 'Vegetable Sticks', calories: 120, protein: '6g', carbs: '18g', fat: '4g' },
+        { name: 'Mixed Berries', calories: 140, protein: '4g', carbs: '24g', fat: '2g' }
       ]
     }
   }

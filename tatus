@@ -1,0 +1,5 @@
+[33m9de1b6c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: configure for Netlify deployment with comprehensive setup guide
+[33m51c7060[m chore(ci): migrate to ESLint flat config, remove deprecated options, make Next build resilient on Netlify
+[33m246d665[m ci: ensure lockfile + Node 20 for Netlify
+[33m74eccf7[m fix(admin): replace axios-style params with querystrings using withParams helper
+[33md30a28e[m initial push
