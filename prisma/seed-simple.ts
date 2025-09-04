@@ -6,41 +6,42 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding simple admin dashboard data...')
 
-  // Create demo users
+  // Hash passwords
   const adminPassword = await bcrypt.hash('admin123', 12)
   const managerPassword = await bcrypt.hash('manager123', 12)
   const staffPassword = await bcrypt.hash('staff123', 12)
 
-  const admin = await prisma.user.upsert({
+  // Create demo users
+  await prisma.user.upsert({
     where: { email: 'admin@demo.local' },
     update: {},
     create: {
       name: 'Admin User',
       email: 'admin@demo.local',
-      passwordHash: adminPassword,
-      role: 'ADMIN' as any,
+       passwordHash: adminPassword, // ✅ Correct usage
+      role: 'ADMIN',
     },
   })
 
-  const manager = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'manager@demo.com' },
     update: {},
     create: {
       name: 'Manager User',
       email: 'manager@demo.com',
       passwordHash: managerPassword,
-      role: 'MANAGER' as any,
+      role: 'MANAGER',
     },
   })
 
-  const staff = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'staff@demo.com' },
     update: {},
     create: {
       name: 'Staff User',
       email: 'staff@demo.com',
       passwordHash: staffPassword,
-      role: 'STAFF' as any,
+      role: 'STAFF',
     },
   })
 
@@ -143,7 +144,7 @@ async function main() {
   console.log('✅ Inventory created')
 
   console.log('🎉 Simple admin dashboard seeding completed!')
-  console.log('\nDemo Accounts:')
+  console.log('\\nDemo Accounts:')
   console.log('Admin: admin@demo.local / admin123')
   console.log('Manager: manager@demo.com / manager123')
   console.log('Staff: staff@demo.com / staff123')
