@@ -25,23 +25,58 @@ export default function Home() {
               <p className="text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
                 Nutritious, customizable meal boxes delivered to your doorstep with professional service and quality assurance.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="https://wa.me/7709811319?text=Hi, I want to order healthy meals from Soothing Flavor"
-                  className="bg-sf-green hover:bg-sf-green-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 btn-glow relative overflow-hidden group"
-                >
-                  <span className="relative z-10">Order on WhatsApp</span>
-                  {/* Green accent glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-sf-green via-sf-teal to-sf-green opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                </Link>
-                <Link 
-                  href="tel:7709811319"
-                  className="bg-white hover:bg-sf-mint text-sf-slate border-2 border-sf-green hover:border-sf-green-dark px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-md relative overflow-hidden group"
-                >
-                  <span className="relative z-10">Call Us</span>
-                  {/* Green accent glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-sf-green/10 to-sf-teal/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </Link>
+              <div className="space-y-4">
+                {/* Primary CTA Row */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link 
+                    href="/products"
+                    className="bg-sf-green hover:bg-sf-green-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 btn-glow relative overflow-hidden group flex items-center justify-center"
+                  >
+                    <span className="relative z-10 flex items-center">
+                      <span className="mr-2">🥗</span>
+                      Order Products
+                    </span>
+                    {/* Green accent glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-sf-green via-sf-teal to-sf-green opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  </Link>
+                  <Link 
+                    href="/meal-plans"
+                    className="bg-sf-orange hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 btn-glow relative overflow-hidden group flex items-center justify-center"
+                  >
+                    <span className="relative z-10 flex items-center">
+                      <span className="mr-2">📅</span>
+                      Meal Plans
+                    </span>
+                    {/* Orange accent glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-sf-orange via-orange-500 to-sf-orange opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  </Link>
+                </div>
+                
+                {/* Secondary CTA Row */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link 
+                    href="https://wa.me/7709811319?text=Hi, I want to order healthy meals from Soothing Flavor"
+                    className="bg-white hover:bg-sf-mint text-sf-slate border-2 border-sf-green hover:border-sf-green-dark px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-md relative overflow-hidden group flex items-center justify-center"
+                  >
+                    <span className="relative z-10 flex items-center">
+                      <span className="mr-2">💬</span>
+                      WhatsApp Order
+                    </span>
+                    {/* Green accent glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-sf-green/10 to-sf-teal/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                  <Link 
+                    href="tel:7709811319"
+                    className="bg-white hover:bg-sf-mint text-sf-slate border-2 border-sf-green hover:border-sf-green-dark px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-md relative overflow-hidden group flex items-center justify-center"
+                  >
+                    <span className="relative z-10 flex items-center">
+                      <span className="mr-2">📞</span>
+                      Call Us
+                    </span>
+                    {/* Green accent glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-sf-green/10 to-sf-teal/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -84,6 +119,106 @@ export default function Home() {
               {/* Faint radial mint glow behind */}
               <div className="absolute inset-0 -z-10 bg-gradient-radial opacity-30"></div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Order Section */}
+      <section className="py-16 bg-gradient-to-r from-emerald-50 via-white to-teal-50 relative overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute inset-0 bg-green-dots opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/20 via-transparent to-teal-100/20"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-sf-slate mb-4">
+              Quick Order Options
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Choose your preferred way to order healthy meals
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {/* Browse Products */}
+            <Link 
+              href="/products"
+              className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-emerald-100 hover:border-emerald-300 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">🥗</span>
+              </div>
+              <h3 className="text-xl font-bold text-sf-slate mb-3 group-hover:text-emerald-700 transition-colors">
+                Browse Products
+              </h3>
+              <p className="text-gray-600 mb-4 text-sm">
+                Explore our full menu of individual meals, bowls, wraps, and more
+              </p>
+              <div className="inline-flex items-center text-emerald-600 font-semibold group-hover:translate-x-1 transition-transform">
+                <span>View Menu</span>
+                <span className="ml-1">→</span>
+              </div>
+            </Link>
+
+            {/* Meal Plans */}
+            <Link 
+              href="/meal-plans"
+              className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-orange-100 hover:border-orange-300 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">📅</span>
+              </div>
+              <h3 className="text-xl font-bold text-sf-slate mb-3 group-hover:text-orange-700 transition-colors">
+                Meal Plans
+              </h3>
+              <p className="text-gray-600 mb-4 text-sm">
+                Subscribe to weekly, bi-weekly, or monthly meal plans
+              </p>
+              <div className="inline-flex items-center text-orange-600 font-semibold group-hover:translate-x-1 transition-transform">
+                <span>View Plans</span>
+                <span className="ml-1">→</span>
+              </div>
+            </Link>
+
+            {/* WhatsApp Order */}
+            <Link 
+              href="https://wa.me/7709811319?text=Hi, I want to order healthy meals from Soothing Flavor"
+              className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-green-100 hover:border-green-300 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">💬</span>
+              </div>
+              <h3 className="text-xl font-bold text-sf-slate mb-3 group-hover:text-green-700 transition-colors">
+                WhatsApp Order
+              </h3>
+              <p className="text-gray-600 mb-4 text-sm">
+                Quick order via WhatsApp with instant support and updates
+              </p>
+              <div className="inline-flex items-center text-green-600 font-semibold group-hover:translate-x-1 transition-transform">
+                <span>Order Now</span>
+                <span className="ml-1">→</span>
+              </div>
+            </Link>
+
+            {/* Call Us */}
+            <Link 
+              href="tel:7709811319"
+              className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-teal-100 hover:border-teal-300 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">📞</span>
+              </div>
+              <h3 className="text-xl font-bold text-sf-slate mb-3 group-hover:text-teal-700 transition-colors">
+                Call Us
+              </h3>
+              <p className="text-gray-600 mb-4 text-sm">
+                Speak directly with our team for personalized service
+              </p>
+              <div className="inline-flex items-center text-teal-600 font-semibold group-hover:translate-x-1 transition-transform">
+                <span>Call Now</span>
+                <span className="ml-1">→</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
