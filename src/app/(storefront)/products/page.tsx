@@ -288,11 +288,13 @@ function ProductsContent() {
                    placeholder="Search meals..."
                    value={searchQuery}
                    onChange={(e) => setSearchQuery(e.target.value)}
+                   suppressHydrationWarning
                    className="w-full pl-5 pr-10 py-3 text-sm border border-slate-200 rounded-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 shadow-sm hover:shadow-md"
                  />
                  {searchQuery && (
                    <button
                      onClick={() => setSearchQuery('')}
+                     suppressHydrationWarning
                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
                    >
                      ×
@@ -310,6 +312,7 @@ function ProductsContent() {
                    <button
                      key={option.value}
                      onClick={() => setVegFilter(option.value as 'all' | 'veg' | 'nonveg')}
+                     suppressHydrationWarning
                      className={`px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${
                        vegFilter === option.value
                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
@@ -338,6 +341,7 @@ function ProductsContent() {
                           setSelectedCategories([...selectedCategories, category])
                         }
                       }}
+                      suppressHydrationWarning
                       className={`px-4 py-2 text-sm font-medium rounded-full border whitespace-nowrap transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${
                         selectedCategories.includes(category)
                           ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
@@ -351,7 +355,7 @@ function ProductsContent() {
               </div>
 
               {/* Sort Dropdown */}
-              <select className="px-4 py-2 text-sm border border-slate-200 rounded-full bg-white text-slate-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm hover:shadow-md transition-all duration-200">
+              <select suppressHydrationWarning className="px-4 py-2 text-sm border border-slate-200 rounded-full bg-white text-slate-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm hover:shadow-md transition-all duration-200">
                 <option value="popular">Popular</option>
                 <option value="new">New</option>
                 <option value="protein">High Protein</option>
@@ -364,6 +368,7 @@ function ProductsContent() {
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
+                  suppressHydrationWarning
                   className="px-4 py-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium bg-emerald-50 hover:bg-emerald-100 rounded-full transition-all duration-200"
                 >
                   Clear all
@@ -381,11 +386,13 @@ function ProductsContent() {
                 placeholder="Search meals..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                suppressHydrationWarning
                 className="w-full pl-5 pr-10 py-3 text-sm border border-slate-200 rounded-full focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 shadow-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
+                  suppressHydrationWarning
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
                 >
                   ×
@@ -404,6 +411,7 @@ function ProductsContent() {
                   <button
                     key={option.value}
                     onClick={() => setVegFilter(option.value as 'all' | 'veg' | 'nonveg')}
+                    suppressHydrationWarning
                     className={`px-3 py-2 text-sm font-medium rounded-full border transition-all duration-200 shadow-sm ${
                       vegFilter === option.value
                         ? 'bg-emerald-600 text-white border-emerald-600'
@@ -416,7 +424,7 @@ function ProductsContent() {
                 ))}
               </div>
 
-              <button className="px-4 py-2 text-sm font-medium text-emerald-600 border border-emerald-200 rounded-full hover:bg-emerald-50 shadow-sm transition-all duration-200">
+              <button suppressHydrationWarning className="px-4 py-2 text-sm font-medium text-emerald-600 border border-emerald-200 rounded-full hover:bg-emerald-50 shadow-sm transition-all duration-200">
                 Filters
               </button>
             </div>
@@ -434,6 +442,7 @@ function ProductsContent() {
                         setSelectedCategories([...selectedCategories, category])
                       }
                     }}
+                    suppressHydrationWarning
                     className={`px-3 py-2 text-sm font-medium rounded-full border whitespace-nowrap transition-all duration-200 shadow-sm ${
                       selectedCategories.includes(category)
                         ? 'bg-emerald-600 text-white border-emerald-600'
@@ -493,6 +502,7 @@ function ProductsContent() {
               </p>
               <button
                 onClick={clearFilters}
+                suppressHydrationWarning
                 className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
                 Clear all filters

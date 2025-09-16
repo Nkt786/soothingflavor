@@ -166,7 +166,7 @@ export function MealPlansFilters() {
           <CardTitle className="text-lg">Sort By</CardTitle>
         </CardHeader>
         <CardContent>
-          <select className="w-full p-2 border border-gray-300 rounded-md text-sm">
+          <select suppressHydrationWarning className="w-full p-2 border border-gray-300 rounded-md text-sm">
             <option value="popularity">Most Popular</option>
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>

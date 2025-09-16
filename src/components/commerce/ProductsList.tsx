@@ -101,6 +101,8 @@ export function ProductsList() {
     price: number; 
     salePrice?: number;
     images: string[];
+    slug?: string;
+    veg?: boolean;
   }) => {
     addToCart({
       id: product.id,
@@ -108,6 +110,8 @@ export function ProductsList() {
       price: product.salePrice || product.price,
       quantity: 1,
       image: product.images[0],
+      slug: product.slug,
+      veg: product.veg,
       type: 'product' as const
     })
     
@@ -172,7 +176,7 @@ export function ProductsList() {
         </p>
         <div className="flex items-center space-x-2">
           <span className="text-sm text-gray-600">Sort by:</span>
-          <select className="text-sm border border-gray-300 rounded-md px-2 py-1">
+          <select suppressHydrationWarning className="text-sm border border-gray-300 rounded-md px-2 py-1">
             <option value="featured">Featured</option>
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>

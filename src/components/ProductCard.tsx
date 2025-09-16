@@ -26,6 +26,7 @@ export default function ProductCard({ id, name, priceINR, veg, categories, descr
         quantity: 1,
         type: 'product',
         image: imageUrl,
+        veg: veg,
       })
     }
   }

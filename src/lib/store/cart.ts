@@ -7,6 +7,8 @@ export interface CartItem {
   price: number
   quantity: number
   image?: string
+  slug?: string
+  veg?: boolean
   type: 'product' | 'subscription'
   mealPlanId?: string
   weeks?: number
