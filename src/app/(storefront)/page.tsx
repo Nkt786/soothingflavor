@@ -47,14 +47,14 @@ export default function Home() {
             {/* Right: Product Image */}
             <div className="relative animate-fade-in-up-delay">
               <div className="relative h-96 md:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/home/bowl.png"
-                  alt="Healthy Bowl"
-                  fill
+                    <Image
+                      src="/home/bowl.png"
+                      alt="Healthy Bowl"
+                      fill
                   className="object-cover hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
               {/* Floating elements */}
               <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#66BB6A] rounded-full opacity-20 animate-bounce"></div>
@@ -121,8 +121,8 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-            </div>
-
+              </div>
+              
             {/* Customizable */}
             <div className="group animate-fade-in-up-delay-3">
               <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-[#66BB6A]/20">
@@ -144,8 +144,8 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-            </div>
-
+              </div>
+              
             {/* Affordable */}
             <div className="group animate-fade-in-up-delay-4">
               <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-[#66BB6A]/20">
@@ -248,7 +248,7 @@ export default function Home() {
               className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#66BB6A]/20 text-center animate-fade-in-up-delay"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-[#2E7D32] to-[#66BB6A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-xl">🥗</span>
+                  <span className="text-xl">🥗</span>
               </div>
               <h4 className="text-[#1B5E20] font-semibold text-sm group-hover:text-[#2E7D32] transition-colors">Bowls</h4>
               <p className="text-xs text-[#4F4F4F] mt-1">Nutritious grain bowls</p>
@@ -260,7 +260,7 @@ export default function Home() {
               className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#66BB6A]/20 text-center animate-fade-in-up-delay-2"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-[#2E7D32] to-[#66BB6A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-xl">📦</span>
+                  <span className="text-xl">📦</span>
               </div>
               <h4 className="text-[#1B5E20] font-semibold text-sm group-hover:text-[#2E7D32] transition-colors">Meal Boxes</h4>
               <p className="text-xs text-[#4F4F4F] mt-1">Complete meal packages</p>
@@ -272,7 +272,7 @@ export default function Home() {
               className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#66BB6A]/20 text-center animate-fade-in-up-delay-3"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-[#2E7D32] to-[#66BB6A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-xl">🌯</span>
+                  <span className="text-xl">🌯</span>
               </div>
               <h4 className="text-[#1B5E20] font-semibold text-sm group-hover:text-[#2E7D32] transition-colors">Wraps</h4>
               <p className="text-xs text-[#4F4F4F] mt-1">Fresh & healthy wraps</p>
@@ -284,7 +284,7 @@ export default function Home() {
               className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#66BB6A]/20 text-center animate-fade-in-up-delay-4"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-[#2E7D32] to-[#66BB6A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-xl">🥪</span>
+                  <span className="text-xl">🥪</span>
               </div>
               <h4 className="text-[#1B5E20] font-semibold text-sm group-hover:text-[#2E7D32] transition-colors">Sandwiches</h4>
               <p className="text-xs text-[#4F4F4F] mt-1">Wholesome sandwiches</p>
@@ -296,7 +296,7 @@ export default function Home() {
               className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#66BB6A]/20 text-center animate-fade-in-up-delay-5"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-[#2E7D32] to-[#66BB6A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-xl">🥬</span>
+                  <span className="text-xl">🥬</span>
               </div>
               <h4 className="text-[#1B5E20] font-semibold text-sm group-hover:text-[#2E7D32] transition-colors">Salads</h4>
               <p className="text-xs text-[#4F4F4F] mt-1">Fresh garden salads</p>
@@ -308,7 +308,7 @@ export default function Home() {
               className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#66BB6A]/20 text-center animate-fade-in-up-delay-6"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-[#2E7D32] to-[#66BB6A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-xl">🥤</span>
+                  <span className="text-xl">🥤</span>
               </div>
               <h4 className="text-[#1B5E20] font-semibold text-sm group-hover:text-[#2E7D32] transition-colors">Juices</h4>
               <p className="text-xs text-[#4F4F4F] mt-1">Fresh fruit juices</p>
@@ -328,7 +328,7 @@ export default function Home() {
               Discover our trending dishes that are popular this week
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Quinoa Power Bowl */}
             <div className="group animate-fade-in-up-delay">
@@ -347,7 +347,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <span className="bg-[#2E7D32] text-white px-3 py-1 rounded-full text-xs font-medium">Veg</span>
                     <span className="text-white font-semibold">₹180</span>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -369,7 +369,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <span className="bg-[#66BB6A] text-white px-3 py-1 rounded-full text-xs font-medium">Non-Veg</span>
                     <span className="text-white font-semibold">₹220</span>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -391,7 +391,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <span className="bg-[#2E7D32] text-white px-3 py-1 rounded-full text-xs font-medium">Veg</span>
                     <span className="text-white font-semibold">₹120</span>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -420,7 +420,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Anjali */}
             <div className="group animate-fade-in-up-delay">
               <div className="bg-gradient-to-br from-[#E8F5E9] to-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-[#66BB6A]/20">
