@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Clock, MessageCircle, Zap, Star, Shield, Truck, Users } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, MessageCircle, Zap, Truck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -111,7 +111,7 @@ export default function ContactPage() {
               {contactMethods.map((method) => (
                 <button
                   key={method.id}
-                  onClick={() => setActiveContact(method.id as any)}
+                  onClick={() => setActiveContact(method.id as 'phone' | 'whatsapp' | 'email')}
                   className={`px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium transition-all duration-200 ${
                     activeContact === method.id
                       ? 'bg-emerald-600 text-white shadow-md'

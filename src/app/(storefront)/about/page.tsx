@@ -101,7 +101,7 @@ export default function AboutPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id as 'story' | 'mission' | 'values')}
                   className={`px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium transition-all duration-200 ${
                     activeTab === tab.id
                       ? 'bg-emerald-600 text-white shadow-md'

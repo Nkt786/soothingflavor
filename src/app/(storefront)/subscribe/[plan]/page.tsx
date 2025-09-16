@@ -133,8 +133,8 @@ export default function SubscribePage() {
       localStorage.setItem('lastSubscription', JSON.stringify(subscription))
       
       // Show success toast (if toast system exists)
-      if (typeof window !== 'undefined' && (window as any).showToast) {
-        (window as any).showToast('Subscription started! #' + subId, 'success')
+      if (typeof window !== 'undefined' && 'showToast' in window) {
+        (window as { showToast: (message: string, type: string) => void }).showToast('Subscription started! #' + subId, 'success')
       }
 
       // Redirect to success page

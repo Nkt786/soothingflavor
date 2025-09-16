@@ -9,8 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useCartStore } from '@/lib/store/cart'
-import { ArrowLeft, Lock, AlertCircle } from 'lucide-react'
-import { toast } from '@/components/ui/use-toast'
+import { ArrowLeft } from 'lucide-react'
 import PlaceOrderButton from './PlaceOrderButton'
 
 // Validation schema
@@ -36,7 +35,6 @@ export default function CheckoutPage() {
 
   const {
     register,
-    handleSubmit,
     formState: { errors, isValid },
     setFocus,
     watch,

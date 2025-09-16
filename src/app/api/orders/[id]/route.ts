@@ -27,8 +27,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     };
     
     return NextResponse.json(mockOrder, { status: 200 });
-  } catch (e: any) {
-    console.error("ORDER_READ_ERROR", e?.message);
+  } catch (e: unknown) {
+    console.error("ORDER_READ_ERROR", e instanceof Error ? e.message : 'Unknown error');
     return NextResponse.json({ error: "Failed to fetch order" }, { status: 500 });
   }
 }

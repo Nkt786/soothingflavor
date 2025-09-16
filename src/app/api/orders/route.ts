@@ -28,11 +28,11 @@ export async function POST(req: Request) {
       itemsCount: items.length,
       subtotal,
       total,
-      items: items.map((item: any) => ({
-        id: item?.id,
-        name: item?.name,
-        quantity: item?.quantity,
-        price: item?.price
+      items: items.map((item: unknown) => ({
+        id: (item as any)?.id,
+        name: (item as any)?.name,
+        quantity: (item as any)?.quantity,
+        price: (item as any)?.price
       }))
     });
 
@@ -53,10 +53,11 @@ ${body.customer.address.landmark ? 'Landmark: ' + body.customer.address.landmark
   : 'N/A'}
 
 🛒 *Order Items:*
-${items.map((item: any, index: number) => 
-  `${index + 1}. ${item?.name || 'Item'} (${item?.veg ? 'Veg' : 'Non-Veg'})
-   Qty: ${item?.quantity || 1} × ₹${item?.price || 0} = ₹${(item?.quantity || 1) * (item?.price || 0)}`
-).join('\n')}
+${items.map((item: unknown, index: number) => {
+  const itemData = item as any;
+  return `${index + 1}. ${itemData?.name || 'Item'} (${itemData?.veg ? 'Veg' : 'Non-Veg'})
+   Qty: ${itemData?.quantity || 1} × ₹${itemData?.price || 0} = ₹${(itemData?.quantity || 1) * (itemData?.price || 0)}`;
+}).join('\n')}
 
 💰 *Pricing:*
 Subtotal: ₹${subtotal}
