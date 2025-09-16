@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -31,7 +30,7 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  // Authentication removed for demo purposes
   const { items, getTotal } = useCartStore()
   const [distance, setDistance] = useState('')
 
@@ -75,14 +74,7 @@ export default function CheckoutPage() {
     }
   }, [errors, setFocus])
 
-  // Show loading state while checking auth
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
-      </div>
-    )
-  }
+  // Authentication loading state removed
 
   // Temporarily disable authentication requirement for demo purposes
   // if (status === 'unauthenticated') {

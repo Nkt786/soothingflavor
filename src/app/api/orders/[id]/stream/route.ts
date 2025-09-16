@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
@@ -8,11 +6,7 @@ export async function GET(
 ) {
   const { id } = await params
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // Authentication removed for demo purposes
 
     // Set up Server-Sent Events headers
     const response = new NextResponse(

@@ -1,21 +1,32 @@
 import { NextResponse } from "next/server";
-import { getPrisma } from "@/lib/prisma";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   try {
-    const prisma = await getPrisma();
-    if (!prisma) {
-      // DB not available — return 404 so UI can fall back to localStorage
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    const o = await prisma.order.findFirst({
-      where: { OR: [{ id: id }, { orderNumber: id }] },
-      include: { items: true },
-    });
-    if (!o) return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    return NextResponse.json(o, { status: 200 });
+    // Database removed for demo purposes - return mock data
+    const mockOrder = {
+      id: id,
+      orderNumber: `ORD-${id}`,
+      status: 'placed',
+      createdAt: new Date().toISOString(),
+      items: [
+        { id: '1', name: 'Demo Product 1', quantity: 2, price: 150 },
+        { id: '2', name: 'Demo Product 2', quantity: 1, price: 200 }
+      ],
+      customer: {
+        fullName: 'Demo Customer',
+        phone: '9876543210',
+        address: {
+          line1: '123 Demo Street',
+          city: 'Nagpur',
+          pincode: '440001'
+        }
+      },
+      total: 500,
+      deliveryCharge: 50
+    };
+    
+    return NextResponse.json(mockOrder, { status: 200 });
   } catch (e: any) {
     console.error("ORDER_READ_ERROR", e?.message);
     return NextResponse.json({ error: "Failed to fetch order" }, { status: 500 });
