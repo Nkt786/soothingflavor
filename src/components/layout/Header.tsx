@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Menu, X, Phone, MessageCircle } from 'lucide-react'
+import { ShoppingCart, Phone } from 'lucide-react'
 import { useState, useEffect } from 'react'
 // import { useCartStore } from '@/lib/store/cart' // Removed - no longer needed
 import { useCart } from '@/context/CartContext'
@@ -13,7 +13,6 @@ const CartCountBadge = dynamic(() => import('@/components/cart/CartCountBadge'),
 
 export default function Header() {
   const pathname = usePathname()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   // const { getItemCount } = useCartStore() // Removed - now using CartCountBadge component
   const { openCart } = useCart()
@@ -34,19 +33,6 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  // Handle body scroll lock when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isMobileMenuOpen])
 
   return (
     <>
@@ -91,7 +77,7 @@ export default function Header() {
                 </Link>
               </div>
 
-              {/* Navigation - Center */}
+              {/* Navigation - Center (Desktop) */}
               <nav className="hidden md:flex items-center space-x-1">
                 {navigation.map((item) => {
                   const isActive = pathname === item.href
@@ -114,6 +100,29 @@ export default function Header() {
                     </Link>
                   )
                 })}
+              </nav>
+
+              {/* Mobile Navigation - Horizontal Scroll */}
+              <nav className="md:hidden flex-1 mx-4 overflow-x-auto scrollbar-hide">
+                <div className="flex items-center space-x-2 min-w-max">
+                  {navigation.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        aria-current={isActive ? 'page' : undefined}
+                        className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                          isActive
+                            ? 'text-white bg-emerald-600 shadow-md'
+                            : 'text-slate-600 hover:text-emerald-600 hover:bg-emerald-50'
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  })}
+                </div>
               </nav>
 
               {/* Actions - Right */}
@@ -144,102 +153,28 @@ export default function Header() {
                 </Button>
               </div>
 
-              {/* Mobile Menu Button */}
-              <div className="md:hidden flex items-center space-x-3">
+              {/* Mobile Actions - Right */}
+              <div className="md:hidden flex items-center space-x-2">
                 {/* Mobile Cart */}
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={openCart}
-                  className="relative text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-300"
+                  className="relative text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-300 p-2"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   <CartCountBadge />
                 </Button>
 
-                {/* Hamburger */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    console.log('Mobile menu clicked, current state:', isMobileMenuOpen)
-                    setIsMobileMenuOpen(!isMobileMenuOpen)
-                  }}
-                  className="text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-300 p-2"
-                  aria-label="Toggle mobile menu"
-                  aria-expanded={isMobileMenuOpen}
-                >
-                  {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {/* Mobile Order Now Button */}
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-full text-sm shadow-sm hover:shadow-md transition-all duration-300">
+                  Order
                 </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Mobile Bottom Sheet Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-[60]">
-            {/* Backdrop */}
-            <div 
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-            
-            {/* Bottom Sheet */}
-            <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl transform transition-all duration-300 ease-out max-h-[80vh] overflow-y-auto">
-              <div className="p-6 space-y-6">
-                {/* Handle */}
-                <div className="flex justify-center">
-                  <div className="w-12 h-1 bg-slate-300 rounded-full"></div>
-                </div>
-
-                {/* Navigation Links */}
-                <nav className="space-y-2">
-                  {navigation.map((item) => {
-                    const isActive = pathname === item.href
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        aria-current={isActive ? 'page' : undefined}
-                        className={`block px-4 py-3 rounded-2xl text-base font-medium transition-all duration-300 ${
-                          isActive
-                            ? 'text-emerald-600 bg-emerald-50 border-l-4 border-emerald-600'
-                            : 'text-slate-600 hover:text-emerald-600 hover:bg-emerald-50'
-                        }`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )
-                  })}
-                </nav>
-
-                {/* Mobile Actions */}
-                <div className="space-y-3 pt-4 border-t border-slate-200">
-                  {/* Call Button */}
-                  <Link
-                    href="tel:7709811319"
-                    className="flex items-center justify-center space-x-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-2xl font-medium transition-all duration-300"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Phone className="w-5 h-5" />
-                    <span>Call 7709811319</span>
-                  </Link>
-
-                  {/* Order Now Button */}
-                  <Button 
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-medium shadow-md hover:shadow-lg transition-all duration-300"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <MessageCircle className="w-5 h-5 mr-2" />
-                    Order Now
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </header>
     </>
   )
