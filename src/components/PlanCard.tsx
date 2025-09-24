@@ -92,12 +92,16 @@ export default function PlanCard({ title, price, description, features, isVeg, i
         {/* Action Buttons - Mobile optimized */}
         <div className="space-y-2 pt-2">
           <Link href={`/subscribe/${planId}`}>
-            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 text-sm">
+            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 text-sm flex items-center justify-center">
+              <span className="mr-2">🚀</span>
               Subscribe Now
             </Button>
           </Link>
-          <Button asChild variant="outline" className="w-full border-2 border-emerald-600 bg-white hover:bg-emerald-50 text-emerald-600 py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-semibold transition-all duration-300 text-sm">
-            <Link href="https://wa.me/917709811319">Subscribe Now</Link>
+          <Button asChild variant="outline" className="w-full border-2 border-slate-300 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-800 py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-medium transition-all duration-300 text-sm flex items-center justify-center">
+            <Link href="https://wa.me/917709811319?text=Hi, I have questions about your meal plans">
+              <span className="mr-2">💬</span>
+              Get Custom Quote
+            </Link>
           </Button>
         </div>
 
