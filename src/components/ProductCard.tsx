@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/lib/store/cart'
 
@@ -16,6 +17,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ id, name, priceINR, veg, categories, description, imageUrl }: ProductCardProps) {
   const { addItem } = useCartStore()
+  const router = useRouter()
 
   const handleAddToCart = () => {
     if (priceINR) {
@@ -28,6 +30,23 @@ export default function ProductCard({ id, name, priceINR, veg, categories, descr
         image: imageUrl,
         veg: veg,
       })
+    }
+  }
+
+  const handleBuyNow = () => {
+    if (priceINR) {
+      // Add item to cart
+      addItem({
+        id,
+        name,
+        price: priceINR,
+        quantity: 1,
+        type: 'product',
+        image: imageUrl,
+        veg: veg,
+      })
+      // Redirect to checkout
+      router.push('/checkout')
     }
   }
 
@@ -106,13 +125,12 @@ export default function ProductCard({ id, name, priceINR, veg, categories, descr
             {priceINR ? 'Add to Cart' : 'Ask for Price'}
           </Button>
           <Button
-            asChild
+            onClick={handleBuyNow}
+            disabled={!priceINR}
             variant="outline"
             className="w-full border-2 border-green-600 bg-white hover:bg-gray-50 text-green-600"
           >
-            <Link href="https://wa.me/917709811319?text=I want to order: {name}">
-              Buy Now
-            </Link>
+            Buy Now
           </Button>
         </div>
       </div>
