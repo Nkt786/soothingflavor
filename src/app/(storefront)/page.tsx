@@ -570,7 +570,7 @@ export default function Home() {
               href="https://wa.me/7709811319?text=Hi, I want to start my healthy meal journey with Soothing Flavor"
               className="bg-white hover:bg-[#E8F5E9] text-[#2E7D32] px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:shadow-xl transform hover:scale-105"
             >
-              Order on WhatsApp
+              Buy Now
             </Link>
             <Link 
               href="/meal-plans"
@@ -586,7 +586,7 @@ export default function Home() {
       <Link 
         href="https://wa.me/7709811319?text=Hi, I want to order healthy meals from Soothing Flavor"
         className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#2E7D32] hover:bg-[#66BB6A] text-white rounded-2xl shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110"
-        aria-label="Order on WhatsApp"
+        aria-label="Buy Now"
       >
         <span className="text-2xl">💬</span>
       </Link>

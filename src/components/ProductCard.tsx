@@ -111,7 +111,7 @@ export default function ProductCard({ id, name, priceINR, veg, categories, descr
             className="w-full border-2 border-green-600 bg-white hover:bg-gray-50 text-green-600"
           >
             <Link href="https://wa.me/917709811319?text=I want to order: {name}">
-              WhatsApp Order
+              Buy Now
             </Link>
           </Button>
         </div>

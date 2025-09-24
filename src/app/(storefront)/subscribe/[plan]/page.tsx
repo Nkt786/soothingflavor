@@ -657,7 +657,7 @@ export default function SubscribePage() {
                       className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 py-3 h-12 rounded-xl"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
-                      Ask on WhatsApp
+                      Subscribe Now
                     </Button>
                   </div>
                 </div>

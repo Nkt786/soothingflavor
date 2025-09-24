@@ -326,7 +326,7 @@ function SubscriptionSuccessContent() {
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 h-12 rounded-xl"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
-                Chat on WhatsApp
+                Subscribe Now
               </Button>
               
               <Link href="/products" className="block">

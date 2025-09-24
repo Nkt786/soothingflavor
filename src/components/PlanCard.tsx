@@ -97,7 +97,7 @@ export default function PlanCard({ title, price, description, features, isVeg, i
             </Button>
           </Link>
           <Button asChild variant="outline" className="w-full border-2 border-emerald-600 bg-white hover:bg-emerald-50 text-emerald-600 py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-semibold transition-all duration-300 text-sm">
-            <Link href="https://wa.me/917709811319">Ask on WhatsApp</Link>
+            <Link href="https://wa.me/917709811319">Subscribe Now</Link>
           </Button>
         </div>
 
