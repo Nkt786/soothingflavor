@@ -49,13 +49,6 @@ export default function CheckoutPage() {
   // Watch form values for real-time validation
   const watchedValues = watch()
 
-  // Temporarily disable authentication requirement for demo purposes
-  // useEffect(() => {
-  //   if (status === 'unauthenticated') {
-  //     toast.error('Please sign in to continue')
-  //     router.push('/auth/signin?next=/checkout')
-  //   }
-  // }, [status, router])
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -72,26 +65,6 @@ export default function CheckoutPage() {
     }
   }, [errors, setFocus])
 
-  // Authentication loading state removed
-
-  // Temporarily disable authentication requirement for demo purposes
-  // if (status === 'unauthenticated') {
-  //   return (
-  //     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-  //       <div className="text-center">
-  //         <Lock className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-  //         <h2 className="text-2xl font-bold text-gray-900 mb-2">Authentication Required</h2>
-  //         <p className="text-gray-600 mb-4">Please sign in to continue with checkout</p>
-  //         <button 
-  //           onClick={() => router.push('/auth/signin?next=/checkout')}
-  //           className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
-  //         >
-  //           Sign In
-  //         </button>
-  //       </div>
-  //     </div>
-  //   )
-  // }
 
   const deliveryCharge = distance ? parseInt(distance) * 10 : 0
   const subtotal = getTotal()
@@ -114,8 +87,6 @@ export default function CheckoutPage() {
             Back
           </button>
           <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          {/* Temporarily hide authentication status for demo */}
-          {/* <p className="text-gray-600">Signed in as {session?.user?.email}</p> */}
           <p className="text-sm text-gray-500 mt-1">Cart items: {items.length}</p>
         </div>
 
@@ -283,7 +254,7 @@ export default function CheckoutPage() {
                     distance: distance ? parseInt(distance) : undefined,
                   }}
                   paymentMethod="Cash on Delivery"
-                  disabled={!isValid || items.length === 0}
+                  disabled={items.length === 0}
                 />
               </form>
             </div>

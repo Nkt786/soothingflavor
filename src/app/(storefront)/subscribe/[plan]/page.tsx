@@ -17,6 +17,37 @@ import DayChips from '@/components/DayChips'
 import SlotChips from '@/components/SlotChips'
 import { Loader2, MessageCircle } from 'lucide-react'
 
+// Add CSS to prevent scroll blocking
+const dropdownStyles = `
+  /* Prevent scroll blocking when dropdowns are open */
+  [data-radix-select-content] {
+    pointer-events: auto !important;
+  }
+  
+  [data-radix-popper-content-wrapper] {
+    pointer-events: auto !important;
+  }
+  
+  /* Allow body scroll when dropdown is open */
+  body[data-scroll-locked="false"] {
+    overflow: visible !important;
+  }
+  
+  /* Ensure dropdown content is interactive */
+  [data-radix-select-content] * {
+    pointer-events: auto !important;
+  }
+  
+  /* Prevent focus trap from blocking scroll */
+  [data-radix-focus-scope] {
+    pointer-events: none !important;
+  }
+  
+  [data-radix-focus-scope] > * {
+    pointer-events: auto !important;
+  }
+`
+
 // Validation schemas
 const preferencesSchema = z.object({
   veg: z.boolean(),
@@ -50,6 +81,17 @@ export default function SubscribePage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [preferencesData, setPreferencesData] = useState<PreferencesFormData | null>(null)
+
+  // Inject CSS to prevent scroll blocking
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = dropdownStyles
+    document.head.appendChild(style)
+    
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
 
   // Get plan details
   const plan = MEAL_PLANS[planId]
@@ -173,24 +215,24 @@ export default function SubscribePage() {
   const canProceed = (): boolean => {
     if (currentStep === 1) {
       // Check if all required fields are filled
-      const values = preferencesForm.getValues()
+      const values = preferencesForm.watch()
       const hasVeg = values.veg !== undefined
-      const hasSpiceLevel = Boolean(values.spiceLevel && typeof values.spiceLevel === 'string' && values.spiceLevel.trim() !== '')
-      const hasProtein = Boolean(values.protein && typeof values.protein === 'string' && values.protein.trim() !== '')
-      const hasCalorieFocus = Boolean(values.calorieFocus && typeof values.calorieFocus === 'string' && values.calorieFocus.trim() !== '')
-      const hasStartDate = Boolean(values.startDate && typeof values.startDate === 'string' && values.startDate.trim() !== '')
+      const hasSpiceLevel = Boolean(values.spiceLevel && values.spiceLevel.trim() !== '')
+      const hasProtein = Boolean(values.protein && values.protein.trim() !== '')
+      const hasCalorieFocus = Boolean(values.calorieFocus && values.calorieFocus.trim() !== '')
+      const hasStartDate = Boolean(values.startDate && values.startDate.trim() !== '')
       const hasSelectedDays = Array.isArray(values.selectedDays) && values.selectedDays.length > 0
       const hasSelectedSlots = Array.isArray(values.selectedSlots) && values.selectedSlots.length > 0
       
       return hasVeg && hasSpiceLevel && hasProtein && hasCalorieFocus && hasStartDate && hasSelectedDays && hasSelectedSlots
     } else if (currentStep === 2) {
       // Check if all required fields are filled
-      const values = deliveryForm.getValues()
-      const hasFullName = Boolean(values.fullName && typeof values.fullName === 'string' && values.fullName.trim() !== '')
-      const hasPhone = Boolean(values.phone && typeof values.phone === 'string' && values.phone.trim() !== '')
-      const hasAddressLine1 = Boolean(values.addressLine1 && typeof values.addressLine1 === 'string' && values.addressLine1.trim() !== '')
-      const hasCity = Boolean(values.city && typeof values.city === 'string' && values.city.trim() !== '')
-      const hasPincode = Boolean(values.pincode && typeof values.pincode === 'string' && values.pincode.trim() !== '')
+      const values = deliveryForm.watch()
+      const hasFullName = Boolean(values.fullName && values.fullName.trim() !== '')
+      const hasPhone = Boolean(values.phone && values.phone.trim() !== '')
+      const hasAddressLine1 = Boolean(values.addressLine1 && values.addressLine1.trim() !== '')
+      const hasCity = Boolean(values.city && values.city.trim() !== '')
+      const hasPincode = Boolean(values.pincode && values.pincode.trim() !== '')
       
       return hasFullName && hasPhone && hasAddressLine1 && hasCity && hasPincode
     }
@@ -205,22 +247,22 @@ export default function SubscribePage() {
   const preferencesDataForSummary = preferencesForm.watch()
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
             Subscribe to {plan.name}
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {plan.description} - {plan.price.toLocaleString()} per month
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            {plan.description} - ₹{plan.price.toLocaleString()} per month
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
           {/* Main Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-md p-8">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
               <StepWizard
                 currentStep={currentStep}
                 totalSteps={3}
@@ -232,146 +274,222 @@ export default function SubscribePage() {
 
               {/* Step 1: Preferences */}
               {currentStep === 1 && (
-                <form onSubmit={preferencesForm.handleSubmit(handlePreferencesSubmit)} className="space-y-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Meal Preferences</h2>
+                <form onSubmit={preferencesForm.handleSubmit(handlePreferencesSubmit)} className="space-y-8">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Customize Your Meal Plan</h2>
+                    <p className="text-gray-600">Tell us about your preferences so we can create the perfect meal plan for you</p>
+                  </div>
                   
-                  {/* Plan Info */}
-                  <div className="bg-green-50 p-4 rounded-xl">
-                    <h3 className="font-semibold text-green-800 text-lg">{plan.name}</h3>
-                    <p className="text-green-700">{plan.description}</p>
-                    <div className="text-xl font-bold text-green-800 mt-2">
-                      ₹{plan.price.toLocaleString()} <span className="text-sm font-normal">/ month</span>
+                  {/* Plan Info Card */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 p-6 rounded-2xl shadow-sm">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-green-800 text-lg mb-2">{plan.name}</h3>
+                        <p className="text-green-700 text-sm mb-3">{plan.description}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl font-bold text-green-800">₹{plan.price.toLocaleString()}</span>
+                          <span className="text-sm text-green-600 font-medium">/ month</span>
+                        </div>
+                      </div>
+                      <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center">
+                        <span className="text-2xl">🍽️</span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Diet Preference */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-medium text-gray-700">Diet Preference *</Label>
-                    <div className="flex space-x-4">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name="veg"
-                          checked={preferencesForm.watch('veg') === true}
-                          onChange={() => preferencesForm.setValue('veg', true)}
-                          className="text-green-600 focus:ring-green-500"
-                        />
-                        <span>Vegetarian</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name="veg"
-                          checked={preferencesForm.watch('veg') === false}
-                          onChange={() => preferencesForm.setValue('veg', false)}
-                          className="text-green-600 focus:ring-green-500"
-                        />
-                        <span>Non-Vegetarian</span>
-                      </label>
+                  {/* Form Fields Grid */}
+                  <div className="space-y-8">
+                    {/* Diet Preference */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <Label className="text-base font-semibold text-gray-800">Diet Preference</Label>
+                        <span className="text-red-500">*</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label className={`
+                          relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200
+                          ${preferencesForm.watch('veg') === true 
+                            ? 'border-green-500 bg-green-50' 
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                          }
+                        `}>
+                          <input
+                            type="radio"
+                            name="veg"
+                            checked={preferencesForm.watch('veg') === true}
+                            onChange={() => preferencesForm.setValue('veg', true)}
+                            className="sr-only"
+                          />
+                          <div className="flex items-center gap-3">
+                            <div className={`
+                              w-5 h-5 rounded-full border-2 flex items-center justify-center
+                              ${preferencesForm.watch('veg') === true 
+                                ? 'border-green-500 bg-green-500' 
+                                : 'border-gray-300'
+                              }
+                            `}>
+                              {preferencesForm.watch('veg') === true && (
+                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">Vegetarian</div>
+                              <div className="text-sm text-gray-500">Plant-based meals</div>
+                            </div>
+                          </div>
+                        </label>
+                        
+                        <label className={`
+                          relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200
+                          ${preferencesForm.watch('veg') === false 
+                            ? 'border-green-500 bg-green-50' 
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                          }
+                        `}>
+                          <input
+                            type="radio"
+                            name="veg"
+                            checked={preferencesForm.watch('veg') === false}
+                            onChange={() => preferencesForm.setValue('veg', false)}
+                            className="sr-only"
+                          />
+                          <div className="flex items-center gap-3">
+                            <div className={`
+                              w-5 h-5 rounded-full border-2 flex items-center justify-center
+                              ${preferencesForm.watch('veg') === false 
+                                ? 'border-green-500 bg-green-500' 
+                                : 'border-gray-300'
+                              }
+                            `}>
+                              {preferencesForm.watch('veg') === false && (
+                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">Non-Vegetarian</div>
+                              <div className="text-sm text-gray-500">Includes meat & eggs</div>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Spice Level */}
-                  <div>
-                    <Label htmlFor="spiceLevel" className="text-sm font-medium text-gray-700">
-                      Spice Level *
-                    </Label>
-                    <Select onValueChange={(value) => preferencesForm.setValue('spiceLevel', value)}>
-                      <SelectTrigger className="mt-1 rounded-xl h-12">
-                        <SelectValue placeholder="Select spice level" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {SPICE_LEVELS.map((level) => (
-                          <SelectItem key={level} value={level}>{level}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {preferencesForm.formState.errors.spiceLevel && (
-                      <p className="mt-1 text-sm text-red-600">{preferencesForm.formState.errors.spiceLevel.message}</p>
-                    )}
-                  </div>
+                    {/* Preferences Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Spice Level */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          <Label className="text-base font-semibold text-gray-800">Spice Level</Label>
+                          <span className="text-red-500">*</span>
+                        </div>
+                        <Select onValueChange={(value) => preferencesForm.setValue('spiceLevel', value)}>
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Choose your spice preference" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {SPICE_LEVELS.map((level) => (
+                              <SelectItem key={level} value={level}>{level}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {preferencesForm.formState.errors.spiceLevel && (
+                          <p className="text-sm text-red-600">{preferencesForm.formState.errors.spiceLevel.message}</p>
+                        )}
+                      </div>
 
-                  {/* Protein */}
-                  <div>
-                    <Label htmlFor="protein" className="text-sm font-medium text-gray-700">
-                      Protein Preference *
-                    </Label>
-                    <Select onValueChange={(value) => preferencesForm.setValue('protein', value)}>
-                      <SelectTrigger className="mt-1 rounded-xl h-12">
-                        <SelectValue placeholder="Select protein option" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PROTEIN_OPTIONS.map((option) => (
-                          <SelectItem key={option} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {preferencesForm.formState.errors.protein && (
-                      <p className="mt-1 text-sm text-red-600">{preferencesForm.formState.errors.protein.message}</p>
-                    )}
-                  </div>
+                      {/* Protein Preference */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          <Label className="text-base font-semibold text-gray-800">Protein Preference</Label>
+                          <span className="text-red-500">*</span>
+                        </div>
+                        <Select onValueChange={(value) => preferencesForm.setValue('protein', value)}>
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Select protein option" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PROTEIN_OPTIONS.map((option) => (
+                              <SelectItem key={option} value={option}>{option}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {preferencesForm.formState.errors.protein && (
+                          <p className="text-sm text-red-600">{preferencesForm.formState.errors.protein.message}</p>
+                        )}
+                      </div>
 
-                  {/* Calorie Focus */}
-                  <div>
-                    <Label htmlFor="calorieFocus" className="text-sm font-medium text-gray-700">
-                      Calorie Focus *
-                    </Label>
-                    <Select onValueChange={(value) => preferencesForm.setValue('calorieFocus', value)}>
-                      <SelectTrigger className="mt-1 rounded-xl h-12">
-                        <SelectValue placeholder="Select calorie focus" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CALORIE_FOCUS.map((focus) => (
-                          <SelectItem key={focus} value={focus}>{focus}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {preferencesForm.formState.errors.calorieFocus && (
-                      <p className="mt-1 text-sm text-red-600">{preferencesForm.formState.errors.calorieFocus.message}</p>
-                    )}
-                  </div>
+                      {/* Calorie Focus */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          <Label className="text-base font-semibold text-gray-800">Calorie Focus</Label>
+                          <span className="text-red-500">*</span>
+                        </div>
+                        <Select onValueChange={(value) => preferencesForm.setValue('calorieFocus', value)}>
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Select calorie focus" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {CALORIE_FOCUS.map((focus) => (
+                              <SelectItem key={focus} value={focus}>{focus}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {preferencesForm.formState.errors.calorieFocus && (
+                          <p className="text-sm text-red-600">{preferencesForm.formState.errors.calorieFocus.message}</p>
+                        )}
+                      </div>
 
-                  {/* Allergens */}
-                  <div>
-                    <Label htmlFor="allergens" className="text-sm font-medium text-gray-700">
-                      Allergens (Optional)
-                    </Label>
-                    <Textarea
-                      {...preferencesForm.register('allergens')}
-                      placeholder="List any food allergies or intolerances"
-                      className="mt-1 rounded-xl min-h-[80px]"
+                      {/* Start Date */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          <Label className="text-base font-semibold text-gray-800">Start Date</Label>
+                          <span className="text-red-500">*</span>
+                        </div>
+                        <Input
+                          {...preferencesForm.register('startDate')}
+                          type="date"
+                          className="h-12 border-gray-200 focus:border-green-500 focus:ring-green-500/20"
+                        />
+                        {preferencesForm.formState.errors.startDate && (
+                          <p className="text-sm text-red-600">{preferencesForm.formState.errors.startDate.message}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Allergens */}
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <Label className="text-base font-semibold text-gray-800">Allergens & Dietary Restrictions</Label>
+                        <span className="text-gray-500 text-sm">(Optional)</span>
+                      </div>
+                      <Textarea
+                        {...preferencesForm.register('allergens')}
+                        placeholder="List any food allergies, intolerances, or dietary restrictions..."
+                        className="min-h-[100px] border-gray-200 focus:border-green-500 focus:ring-green-500/20 resize-none"
+                      />
+                    </div>
+
+                    {/* Days of Week */}
+                    <DayChips
+                      selectedDays={preferencesForm.watch('selectedDays')}
+                      onChange={(days) => preferencesForm.setValue('selectedDays', days)}
                     />
-                  </div>
 
-                  {/* Start Date */}
-                  <div>
-                    <Label htmlFor="startDate" className="text-sm font-medium text-gray-700">
-                      Start Date *
-                    </Label>
-                    <Input
-                      {...preferencesForm.register('startDate')}
-                      type="date"
-                      className="mt-1 rounded-xl h-12"
+                    {/* Delivery Slots */}
+                    <SlotChips
+                      selectedSlots={preferencesForm.watch('selectedSlots')}
+                      onChange={(slots) => preferencesForm.setValue('selectedSlots', slots)}
+                      planMeals={plan.meals}
                     />
-                    {preferencesForm.formState.errors.startDate && (
-                      <p className="mt-1 text-sm text-red-600">{preferencesForm.formState.errors.startDate.message}</p>
-                    )}
+
+                    <p className="text-sm text-gray-500 text-center">Custom meals available.</p>
                   </div>
-
-                  {/* Days of Week */}
-                  <DayChips
-                    selectedDays={preferencesForm.watch('selectedDays')}
-                    onChange={(days) => preferencesForm.setValue('selectedDays', days)}
-                  />
-
-                  {/* Delivery Slots */}
-                  <SlotChips
-                    selectedSlots={preferencesForm.watch('selectedSlots')}
-                    onChange={(slots) => preferencesForm.setValue('selectedSlots', slots)}
-                    planMeals={plan.meals}
-                  />
-
-                  <p className="text-sm text-gray-500 text-center">Custom meals available.</p>
                 </form>
               )}
 

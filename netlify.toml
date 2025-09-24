@@ -7,7 +7,6 @@
   NPM_FLAGS = "--legacy-peer-deps"
 
 # Required Environment Variables (set these in Netlify UI):
-# DATABASE_URL - PostgreSQL connection string
 # NEXTAUTH_SECRET - Secret key for NextAuth
 # NEXTAUTH_URL - Your Netlify site URL (e.g., https://your-site.netlify.app)
 # NEXT_PUBLIC_API_URL - Your Netlify site URL (e.g., https://your-site.netlify.app)

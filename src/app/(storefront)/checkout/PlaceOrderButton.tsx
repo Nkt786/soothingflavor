@@ -42,6 +42,26 @@ export default function PlaceOrderButton({
   const handlePlaceOrder = async () => {
     if (isSubmitting || disabled) return
 
+    // Client-side validation for required fields
+    if (!customer.fullName || !customer.phone || !customer.address.line1 || !customer.address.city || !customer.address.pincode) {
+      toast.error('Please fill in all required fields (Name, Phone, Address, City, Pincode)')
+      return
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^[6-9]\d{9}$/
+    if (!phoneRegex.test(customer.phone)) {
+      toast.error('Please enter a valid 10-digit Indian phone number')
+      return
+    }
+
+    // Validate pincode format
+    const pincodeRegex = /^\d{6}$/
+    if (!pincodeRegex.test(customer.address.pincode)) {
+      toast.error('Please enter a valid 6-digit pincode')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
