@@ -74,7 +74,8 @@ export default function CheckoutPage() {
       setValue('distance', distance.toString())
     } catch (error) {
       console.error('Error calculating delivery:', error)
-      setDeliveryError('Failed to calculate delivery charge. Please try again.')
+      const errorMessage = error instanceof Error ? error.message : 'Failed to calculate delivery charge. Please try again.'
+      setDeliveryError(errorMessage)
     } finally {
       setIsCalculatingDelivery(false)
     }

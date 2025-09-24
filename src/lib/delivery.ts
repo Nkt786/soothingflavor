@@ -62,7 +62,7 @@ export async function getDistanceFromGoogle(destination: Location): Promise<numb
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   
   if (!apiKey) {
-    throw new Error('Google Maps API key not found');
+    throw new Error('Google Maps API key not found. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables.');
   }
 
   const origin = `${RESTAURANT_LOCATION.lat},${RESTAURANT_LOCATION.lng}`;
@@ -75,11 +75,14 @@ export async function getDistanceFromGoogle(destination: Location): Promise<numb
     const data = await response.json();
     
     if (data.status === 'OK' && data.rows[0]?.elements[0]?.status === 'OK') {
-      const distanceText = data.rows[0].elements[0].distance.text;
       const distanceValue = data.rows[0].elements[0].distance.value; // in meters
       return distanceValue / 1000; // Convert to kilometers
+    } else if (data.status === 'REQUEST_DENIED') {
+      throw new Error('Google Maps API key is invalid or restricted. Please check your API key configuration.');
+    } else if (data.status === 'OVER_QUERY_LIMIT') {
+      throw new Error('Google Maps API quota exceeded. Please try again later.');
     } else {
-      throw new Error('Distance calculation failed');
+      throw new Error(`Distance calculation failed: ${data.status}`);
     }
   } catch (error) {
     console.error('Error calculating distance:', error);
@@ -96,7 +99,7 @@ export async function getCoordinatesFromAddress(address: string): Promise<Locati
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   
   if (!apiKey) {
-    throw new Error('Google Maps API key not found');
+    throw new Error('Google Maps API key not found. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables.');
   }
 
   const encodedAddress = encodeURIComponent(address);
@@ -112,8 +115,12 @@ export async function getCoordinatesFromAddress(address: string): Promise<Locati
         lat: location.lat,
         lng: location.lng
       };
+    } else if (data.status === 'REQUEST_DENIED') {
+      throw new Error('Google Maps API key is invalid or restricted. Please check your API key configuration.');
+    } else if (data.status === 'OVER_QUERY_LIMIT') {
+      throw new Error('Google Maps API quota exceeded. Please try again later.');
     } else {
-      throw new Error('Address not found');
+      throw new Error(`Address geocoding failed: ${data.status}`);
     }
   } catch (error) {
     console.error('Error geocoding address:', error);
