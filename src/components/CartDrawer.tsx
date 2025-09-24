@@ -99,12 +99,12 @@ export default function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label="Shopping Cart"
-        className={`fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-[100] transition-transform duration-300 ${
+        className={`fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-[100] transition-transform duration-300 flex flex-col ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
           <h2 className="text-xl font-bold text-gray-900">Shopping Cart</h2>
           <Button
             variant="ghost"
@@ -116,8 +116,8 @@ export default function CartDrawer() {
           </Button>
         </div>
 
-        {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto p-6 h-[calc(100vh-200px)]">
+        {/* Cart Items - Scrollable Area */}
+        <div className="flex-1 overflow-y-auto p-6 min-h-0">
           {items.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">🛒</div>
@@ -180,9 +180,9 @@ export default function CartDrawer() {
           )}
         </div>
 
-        {/* Footer */}
+        {/* Footer - Always Visible */}
         {items.length > 0 && (
-          <div className="border-t border-gray-200 p-6 space-y-4">
+          <div className="border-t border-gray-200 p-6 space-y-4 flex-shrink-0 bg-white">
             {/* Total */}
             <div className="flex justify-between items-center">
               <span className="text-lg font-medium text-gray-900">Total:</span>
