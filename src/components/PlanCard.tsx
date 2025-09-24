@@ -10,9 +10,10 @@ interface PlanCardProps {
   image?: string
   duration?: 'weekly' | 'monthly'
   savings?: string | number
+  vegNote?: string
 }
 
-export default function PlanCard({ title, price, description, features, isVeg, image, duration = 'monthly', savings }: PlanCardProps) {
+export default function PlanCard({ title, price, description, features, isVeg, image, duration = 'monthly', savings, vegNote }: PlanCardProps) {
   // Convert title to plan ID for routing
   const getPlanId = (title: string) => {
     if (title.includes('Deluxe')) return 'deluxe'
@@ -42,17 +43,18 @@ export default function PlanCard({ title, price, description, features, isVeg, i
           <div className="flex flex-col space-y-1 flex-shrink-0">
             <span className={`inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-bold ${
               duration === 'weekly' 
-                ? 'bg-blue-100 text-blue-800' 
-                : 'bg-orange-100 text-orange-800'
+                ? 'bg-blue-100 text-blue-800 border border-blue-200' 
+                : 'bg-orange-100 text-orange-800 border border-orange-200'
             }`}>
               {duration === 'weekly' ? 'Weekly' : 'Monthly'}
             </span>
             <span className={`inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-xs font-bold ${
+              vegNote ? 'bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200' : 
               isVeg 
                 ? 'bg-emerald-100 text-emerald-800' 
                 : 'bg-red-100 text-red-800'
             }`}>
-              {isVeg ? '🥬 Veg' : '🍗 Non-Veg'}
+              {vegNote || (isVeg ? '🥬 Veg' : '🍗 Non-Veg')}
             </span>
           </div>
         </div>
@@ -90,19 +92,13 @@ export default function PlanCard({ title, price, description, features, isVeg, i
         </ul>
 
         {/* Action Buttons - Mobile optimized */}
-        <div className="space-y-2 pt-2">
+        <div className="pt-2">
           <Link href={`/subscribe/${planId}`}>
             <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 text-sm flex items-center justify-center">
               <span className="mr-2">🚀</span>
               Subscribe Now
             </Button>
           </Link>
-          <Button asChild variant="outline" className="w-full border-2 border-slate-300 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-800 py-2 md:py-2.5 h-9 md:h-10 rounded-xl md:rounded-2xl font-medium transition-all duration-300 text-sm flex items-center justify-center">
-            <Link href="https://wa.me/917709811319?text=Hi, I have questions about your meal plans">
-              <span className="mr-2">💬</span>
-              Get Custom Quote
-            </Link>
-          </Button>
         </div>
 
         {/* Footnote */}

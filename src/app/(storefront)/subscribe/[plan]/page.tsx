@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { MEAL_PLANS, SPICE_LEVELS, PROTEIN_OPTIONS, CALORIE_FOCUS, DELIVERY_CHARGE_PER_KM } from '@/lib/plans'
-import StepWizard from '@/components/StepWizard'
+import StepWizard, { StepNavigation } from '@/components/StepWizard'
 import SummaryCard from '@/components/SummaryCard'
 import DayChips from '@/components/DayChips'
 import SlotChips from '@/components/SlotChips'
@@ -490,6 +490,15 @@ export default function SubscribePage() {
 
                     <p className="text-sm text-gray-500 text-center">Custom meals available.</p>
                   </div>
+                  
+                  <StepNavigation
+                    currentStep={currentStep}
+                    totalSteps={3}
+                    onNext={goToNext}
+                    onPrevious={goToPrevious}
+                    canProceed={canProceed()}
+                    isSubmitting={isSubmitting}
+                  />
                 </form>
               )}
 
@@ -618,6 +627,15 @@ export default function SubscribePage() {
                   <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
                     Delivery charges ₹10 per km.
                   </div>
+                  
+                  <StepNavigation
+                    currentStep={currentStep}
+                    totalSteps={3}
+                    onNext={goToNext}
+                    onPrevious={goToPrevious}
+                    canProceed={canProceed()}
+                    isSubmitting={isSubmitting}
+                  />
                 </form>
               )}
 
@@ -660,6 +678,15 @@ export default function SubscribePage() {
                       Subscribe Now
                     </Button>
                   </div>
+                  
+                  <StepNavigation
+                    currentStep={currentStep}
+                    totalSteps={3}
+                    onNext={goToNext}
+                    onPrevious={goToPrevious}
+                    canProceed={canProceed()}
+                    isSubmitting={isSubmitting}
+                  />
                 </div>
               )}
             </div>

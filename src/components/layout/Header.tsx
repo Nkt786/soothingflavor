@@ -125,11 +125,6 @@ export default function Header() {
                     <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                     <CartCountBadge />
                   </Button>
-
-                  {/* Order Now Button */}
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all duration-300">
-                    Order Now
-                  </Button>
                 </div>
               </div>
             </div>
@@ -168,10 +163,6 @@ export default function Header() {
                     <CartCountBadge />
                   </Button>
 
-                  {/* Mobile Order Now Button */}
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-full text-sm shadow-sm hover:shadow-md transition-all duration-300">
-                    Order
-                  </Button>
                 </div>
               </div>
             </div>

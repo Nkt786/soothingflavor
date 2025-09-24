@@ -13,7 +13,8 @@ export default function MealPlansPage() {
       weeklyPrice: 3249,
       description: 'Lunch and Dinner',
       features: ['Freshly cooked', 'Portion-controlled', 'Macro-balanced', 'Premium ingredients'],
-      isVeg: true,
+      isVeg: false, // Offers both veg and non-veg
+      vegNote: 'Veg & Non-Veg Available',
       popular: true,
       savings: 'Save ₹1,000 monthly',
     },
@@ -23,7 +24,8 @@ export default function MealPlansPage() {
       weeklyPrice: 1449,
       description: 'Lunch or Dinner',
       features: ['Freshly cooked', 'Portion-controlled', 'Macro-balanced', 'Flexible timing'],
-      isVeg: true,
+      isVeg: false, // Offers both veg and non-veg
+      vegNote: 'Veg & Non-Veg Available',
       popular: false,
       savings: 'Save ₹500 monthly',
     },
@@ -33,7 +35,8 @@ export default function MealPlansPage() {
       weeklyPrice: 1199,
       description: 'Vegetable & Fruit Salad + Juices',
       features: ['Freshly prepared', 'Portion-controlled', 'Nutrient-rich', 'Detox friendly'],
-      isVeg: true,
+      isVeg: true, // 100% vegetarian
+      vegNote: '100% Vegetarian',
       popular: false,
       savings: 'Save ₹400 monthly',
     }
@@ -150,6 +153,7 @@ export default function MealPlansPage() {
                   description={plan.description}
                   features={plan.features}
                   isVeg={plan.isVeg}
+                  vegNote={plan.vegNote}
                   duration={selectedDuration}
                   savings={selectedDuration === 'weekly' ? calculateSavings(plan) : plan.savings}
                 />

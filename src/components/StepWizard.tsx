@@ -54,28 +54,39 @@ export default function StepWizard({
           </div>
         ))}
       </div>
+    </div>
+  )
+}
 
-      {/* Navigation Buttons */}
-      <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0">
-        <Button
-          variant="outline"
-          onClick={onPrevious}
-          disabled={currentStep === 1 || isSubmitting}
-          className="px-4 sm:px-6 py-2 sm:py-2 order-2 sm:order-1"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Previous
-        </Button>
+// Separate component for navigation buttons
+export function StepNavigation({ 
+  currentStep, 
+  totalSteps, 
+  onNext, 
+  onPrevious, 
+  canProceed, 
+  isSubmitting = false 
+}: StepWizardProps) {
+  return (
+    <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 mt-8 pt-6 border-t border-gray-200">
+      <Button
+        variant="outline"
+        onClick={onPrevious}
+        disabled={currentStep === 1 || isSubmitting}
+        className="px-4 sm:px-6 py-2 sm:py-2 order-2 sm:order-1"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Previous
+      </Button>
 
-        <Button
-          onClick={onNext}
-          disabled={!canProceed || isSubmitting}
-          className="px-4 sm:px-6 py-2 sm:py-2 bg-green-600 hover:bg-green-700 order-1 sm:order-2"
-        >
-          {currentStep === totalSteps ? 'Start Subscription' : 'Next'}
-          {currentStep < totalSteps && <ArrowRight className="w-4 h-4 ml-2" />}
-        </Button>
-      </div>
+      <Button
+        onClick={onNext}
+        disabled={!canProceed || isSubmitting}
+        className="px-4 sm:px-6 py-2 sm:py-2 bg-green-600 hover:bg-green-700 order-1 sm:order-2"
+      >
+        {currentStep === totalSteps ? 'Start Subscription' : 'Next'}
+        {currentStep < totalSteps && <ArrowRight className="w-4 h-4 ml-2" />}
+      </Button>
     </div>
   )
 }
