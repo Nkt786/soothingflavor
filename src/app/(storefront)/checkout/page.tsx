@@ -9,8 +9,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useCartStore } from '@/lib/store/cart'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, MapPin, Truck } from 'lucide-react'
 import PlaceOrderButton from './PlaceOrderButton'
+import GooglePlacesAutocomplete from '@/components/ui/google-places-autocomplete'
+import { calculateDeliveryCharge, getDistanceFromGoogle, getCoordinatesFromAddress, RESTAURANT_LOCATION, type DeliveryInfo } from '@/lib/delivery'
 
 // Validation schema
 const checkoutSchema = z.object({
@@ -29,15 +31,17 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>
 
 export default function CheckoutPage() {
   const router = useRouter()
-  // Authentication removed for demo purposes
   const { items, getTotal } = useCartStore()
-  const [distance, setDistance] = useState('')
+  const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null)
+  const [isCalculatingDelivery, setIsCalculatingDelivery] = useState(false)
+  const [deliveryError, setDeliveryError] = useState<string | null>(null)
 
   const {
     register,
     formState: { errors, isValid },
     setFocus,
     watch,
+    setValue,
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -49,6 +53,32 @@ export default function CheckoutPage() {
   // Watch form values for real-time validation
   const watchedValues = watch()
 
+  // Calculate delivery when address changes
+  const handleAddressSelect = async (place: any) => {
+    if (!place.geometry?.location) return
+
+    setIsCalculatingDelivery(true)
+    setDeliveryError(null)
+
+    try {
+      const customerLocation = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      }
+
+      const distance = await getDistanceFromGoogle(customerLocation)
+      const subtotal = getTotal()
+      const deliveryInfo = calculateDeliveryCharge(distance, subtotal)
+      
+      setDeliveryInfo(deliveryInfo)
+      setValue('distance', distance.toString())
+    } catch (error) {
+      console.error('Error calculating delivery:', error)
+      setDeliveryError('Failed to calculate delivery charge. Please try again.')
+    } finally {
+      setIsCalculatingDelivery(false)
+    }
+  }
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -65,9 +95,17 @@ export default function CheckoutPage() {
     }
   }, [errors, setFocus])
 
+  // Recalculate delivery when cart total changes
+  useEffect(() => {
+    if (deliveryInfo) {
+      const subtotal = getTotal()
+      const newDeliveryInfo = calculateDeliveryCharge(deliveryInfo.distance, subtotal)
+      setDeliveryInfo(newDeliveryInfo)
+    }
+  }, [items, getTotal])
 
-  const deliveryCharge = distance ? parseInt(distance) * 10 : 0
   const subtotal = getTotal()
+  const deliveryCharge = deliveryInfo?.deliveryCharge || 0
   const total = subtotal + deliveryCharge
 
   if (items.length === 0) {
@@ -131,18 +169,16 @@ export default function CheckoutPage() {
 
                 {/* Address Line 1 */}
                 <div>
-                  <Label htmlFor="addressLine1" className="text-sm font-medium text-gray-700">
-                    Address Line 1 *
-                  </Label>
-                  <Input
-                    id="addressLine1"
-                    {...register('addressLine1')}
-                    placeholder="House/Flat number, Street name"
-                    className="mt-1 rounded-xl h-12"
+                  <GooglePlacesAutocomplete
+                    value={watchedValues.addressLine1 || ''}
+                    onChange={(value) => setValue('addressLine1', value)}
+                    onPlaceSelect={handleAddressSelect}
+                    label="Delivery Address"
+                    placeholder="Start typing your address..."
+                    required
+                    error={errors.addressLine1?.message}
+                    className="mt-1"
                   />
-                  {errors.addressLine1 && (
-                    <p className="mt-1 text-sm text-red-600">{errors.addressLine1.message}</p>
-                  )}
                 </div>
 
                 {/* Address Line 2 */}
@@ -203,22 +239,6 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-                {/* Distance */}
-                <div>
-                  <Label htmlFor="distance" className="text-sm font-medium text-gray-700">
-                    Distance (km)
-                  </Label>
-                  <Input
-                    id="distance"
-                    {...register('distance')}
-                    placeholder="Enter distance from city center"
-                    className="mt-1 rounded-xl h-12"
-                    onChange={(e) => setDistance(e.target.value)}
-                  />
-                  {errors.distance && (
-                    <p className="mt-1 text-sm text-red-600">{errors.distance.message}</p>
-                  )}
-                </div>
 
                 {/* Delivery Notes */}
                 <div>
@@ -251,7 +271,7 @@ export default function CheckoutPage() {
                     subtotal,
                     deliveryCharge,
                     total,
-                    distance: distance ? parseInt(distance) : undefined,
+                    distance: deliveryInfo?.distance,
                   }}
                   paymentMethod="Cash on Delivery"
                   disabled={items.length === 0}
@@ -278,6 +298,39 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
+              {/* Delivery Information */}
+              {deliveryInfo && (
+                <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <MapPin className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm font-medium text-blue-800">Delivery Information</span>
+                  </div>
+                  <div className="text-sm text-blue-700">
+                    <p>Distance: {deliveryInfo.distance} km from Ajni Metro</p>
+                    {deliveryInfo.isFreeDelivery && (
+                      <p className="text-green-600 font-medium">🎉 Free delivery on orders above ₹500!</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Delivery Calculation Status */}
+              {isCalculatingDelivery && (
+                <div className="bg-yellow-50 p-4 rounded-lg mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Truck className="w-4 h-4 text-yellow-600 animate-pulse" />
+                    <span className="text-sm text-yellow-700">Calculating delivery charge...</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Delivery Error */}
+              {deliveryError && (
+                <div className="bg-red-50 p-4 rounded-lg mb-4">
+                  <p className="text-sm text-red-700">{deliveryError}</p>
+                </div>
+              )}
+
               {/* Pricing */}
               <div className="space-y-2 border-t border-gray-200 pt-4">
                 <div className="flex justify-between text-sm">
@@ -285,8 +338,13 @@ export default function CheckoutPage() {
                   <span className="text-gray-900">₹{subtotal}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Delivery Charge</span>
-                  <span className="text-gray-900">₹{deliveryCharge}</span>
+                  <span className="text-gray-600">
+                    Delivery Charge
+                    {deliveryInfo?.isFreeDelivery && <span className="text-green-600 ml-1">(Free!)</span>}
+                  </span>
+                  <span className={`text-gray-900 ${deliveryInfo?.isFreeDelivery ? 'line-through text-gray-500' : ''}`}>
+                    ₹{deliveryCharge}
+                  </span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-2">
                   <span className="text-gray-900">Total</span>

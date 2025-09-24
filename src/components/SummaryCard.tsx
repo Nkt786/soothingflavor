@@ -1,7 +1,9 @@
 'use client'
 
-import { MealPlan, DELIVERY_CHARGE_PER_KM } from '@/lib/plans'
+import { MealPlan } from '@/lib/plans'
 import { formatPrice } from '@/lib/utils'
+import { calculateDeliveryCharge, type DeliveryInfo } from '@/lib/delivery'
+import { MapPin } from 'lucide-react'
 
 interface SummaryCardProps {
   plan: MealPlan
@@ -18,13 +20,21 @@ interface SummaryCardProps {
   deliveryDetails: {
     distance?: string | number
   }
+  deliveryInfo?: DeliveryInfo | null
+  isCalculatingDelivery?: boolean
+  deliveryError?: string | null
   isReview?: boolean
 }
 
-export default function SummaryCard({ plan, preferences, deliveryDetails }: SummaryCardProps) {
-  const deliveryCharge = deliveryDetails.distance 
-    ? (typeof deliveryDetails.distance === 'string' ? parseInt(deliveryDetails.distance) : deliveryDetails.distance) * DELIVERY_CHARGE_PER_KM 
-    : 0
+export default function SummaryCard({ 
+  plan, 
+  preferences, 
+  deliveryDetails, 
+  deliveryInfo,
+  isCalculatingDelivery = false,
+  deliveryError = null
+}: SummaryCardProps) {
+  const deliveryCharge = deliveryInfo?.deliveryCharge || 0
   const total = plan.price + deliveryCharge
 
   const formatDays = (days: string[]) => {
@@ -105,6 +115,39 @@ export default function SummaryCard({ plan, preferences, deliveryDetails }: Summ
         </div>
       </div>
 
+      {/* Delivery Information */}
+      {deliveryInfo && (
+        <div className="bg-blue-50 p-4 rounded-lg mb-4">
+          <div className="flex items-center space-x-2 mb-2">
+            <MapPin className="w-4 h-4 text-blue-600" />
+            <span className="text-sm font-medium text-blue-800">Delivery Information</span>
+          </div>
+          <div className="text-sm text-blue-700">
+            <p>Distance: {deliveryInfo.distance} km from Ajni Metro</p>
+            {deliveryInfo.isFreeDelivery && (
+              <p className="text-green-600 font-medium">🎉 Free delivery on orders above ₹500!</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Delivery Calculation Status */}
+      {isCalculatingDelivery && (
+        <div className="bg-yellow-50 p-4 rounded-lg mb-4">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 border-2 border-yellow-600 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-sm text-yellow-700">Calculating delivery charge...</span>
+          </div>
+        </div>
+      )}
+
+      {/* Delivery Error */}
+      {deliveryError && (
+        <div className="bg-red-50 p-4 rounded-lg mb-4">
+          <p className="text-sm text-red-700">{deliveryError}</p>
+        </div>
+      )}
+
       {/* Pricing */}
       <div className="border-t border-gray-200 pt-4 space-y-2">
         <div className="flex justify-between text-sm">
@@ -112,10 +155,13 @@ export default function SummaryCard({ plan, preferences, deliveryDetails }: Summ
           <span className="font-medium">{formatPrice(plan.price)}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Delivery:</span>
-          <span className="font-medium">
-            {deliveryDetails.distance 
-              ? `${formatPrice(deliveryCharge)} (${deliveryDetails.distance} km)`
+          <span className="text-gray-600">
+            Delivery
+            {deliveryInfo?.isFreeDelivery && <span className="text-green-600 ml-1">(Free!)</span>}
+          </span>
+          <span className={`font-medium ${deliveryInfo?.isFreeDelivery ? 'line-through text-gray-500' : ''}`}>
+            {deliveryInfo 
+              ? `${formatPrice(deliveryCharge)} (${deliveryInfo.distance} km)`
               : 'TBD - ₹10/km'
             }
           </span>
@@ -131,7 +177,7 @@ export default function SummaryCard({ plan, preferences, deliveryDetails }: Summ
       {/* Additional Info */}
       <div className="mt-4 text-xs text-gray-500 text-center">
         <p>Custom meals available.</p>
-        <p>Delivery charges ₹10 per km</p>
+        <p>Free delivery on orders above ₹500</p>
       </div>
     </div>
   )

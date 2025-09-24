@@ -15,7 +15,9 @@ import StepWizard, { StepNavigation } from '@/components/StepWizard'
 import SummaryCard from '@/components/SummaryCard'
 import DayChips from '@/components/DayChips'
 import SlotChips from '@/components/SlotChips'
-import { Loader2, MessageCircle } from 'lucide-react'
+import GooglePlacesAutocomplete from '@/components/ui/google-places-autocomplete'
+import { calculateDeliveryCharge, getDistanceFromGoogle, RESTAURANT_LOCATION, type DeliveryInfo } from '@/lib/delivery'
+import { Loader2, MessageCircle, MapPin, Truck } from 'lucide-react'
 
 // Add CSS to prevent scroll blocking
 const dropdownStyles = `
@@ -81,6 +83,9 @@ export default function SubscribePage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [preferencesData, setPreferencesData] = useState<PreferencesFormData | null>(null)
+  const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null)
+  const [isCalculatingDelivery, setIsCalculatingDelivery] = useState(false)
+  const [deliveryError, setDeliveryError] = useState<string | null>(null)
 
   // Inject CSS to prevent scroll blocking
   useEffect(() => {
@@ -130,6 +135,32 @@ export default function SubscribePage() {
   const handlePreferencesSubmit = (data: PreferencesFormData) => {
     setPreferencesData(data)
     setCurrentStep(2)
+  }
+
+  // Calculate delivery when address changes
+  const handleAddressSelect = async (place: any) => {
+    if (!place.geometry?.location) return
+
+    setIsCalculatingDelivery(true)
+    setDeliveryError(null)
+
+    try {
+      const customerLocation = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      }
+
+      const distance = await getDistanceFromGoogle(customerLocation)
+      const planPrice = plan.price
+      const deliveryInfo = calculateDeliveryCharge(distance, planPrice)
+      
+      setDeliveryInfo(deliveryInfo)
+    } catch (error) {
+      console.error('Error calculating delivery:', error)
+      setDeliveryError('Failed to calculate delivery charge. Please try again.')
+    } finally {
+      setIsCalculatingDelivery(false)
+    }
   }
 
   // Handle delivery form submission
@@ -539,17 +570,16 @@ export default function SubscribePage() {
 
                   {/* Address Line 1 */}
                   <div>
-                    <Label htmlFor="addressLine1" className="text-sm font-medium text-gray-700">
-                      Address Line 1 *
-                    </Label>
-                    <Input
-                      {...deliveryForm.register('addressLine1')}
-                      placeholder="Enter your address"
-                      className="mt-1 rounded-xl h-12"
+                    <GooglePlacesAutocomplete
+                      value={deliveryForm.watch('addressLine1') || ''}
+                      onChange={(value) => deliveryForm.setValue('addressLine1', value)}
+                      onPlaceSelect={handleAddressSelect}
+                      label="Delivery Address"
+                      placeholder="Start typing your address..."
+                      required
+                      error={deliveryForm.formState.errors.addressLine1?.message}
+                      className="mt-1"
                     />
-                    {deliveryForm.formState.errors.addressLine1 && (
-                      <p className="mt-1 text-sm text-red-600">{deliveryForm.formState.errors.addressLine1.message}</p>
-                    )}
                   </div>
 
                   {/* Address Line 2 */}
@@ -699,6 +729,9 @@ export default function SubscribePage() {
                 plan={plan}
                 preferences={preferencesDataForSummary}
                 deliveryDetails={deliveryData}
+                deliveryInfo={deliveryInfo}
+                isCalculatingDelivery={isCalculatingDelivery}
+                deliveryError={deliveryError}
               />
             </div>
           </div>
